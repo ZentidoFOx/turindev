@@ -1,31 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getActresses, type Actress, type ApiResponse } from '../services/api';
 
-interface Actress {
-  id: string;
-  name: string;
-  slug: string;
-  image: string;
-  bio: string;
-  birthDate: string;
-  birthPlace: string;
-  height: string;
-  featured: boolean;
-}
-
-interface ApiResponse {
-  success: boolean;
-  data: Actress[];
-  count: number;
-}
-
-const response = await fetch('https://ensalud.info/generator/api-actriz.php', {
-  headers: {
-    'Accept': 'application/json',
-    'User-Agent': 'turin.dev'
-  }
-});
-const data: ApiResponse = await response.json();
+const data = await getActresses();
 ---
 
 <Layout title="API Test - Actrices">
