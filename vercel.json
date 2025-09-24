@@ -3,11 +3,6 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "regions": ["iad1"],
-  "functions": {
-    "api/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "routes": [
     {
       "src": "/api-test",
