@@ -14,8 +14,16 @@
     <meta name="description" content="Turin.dev - Proyecto de desarrollo con Astro y TailwindCSS." />
 	<meta name="theme-color" content="#000000" />
   </head>
-  <body>
+  <body class="bg-zinc-950 text-white min-h-screen">
     <slot />
     <script src="../assets/js/main.js"></script>
   </body>
 </html>
+
+<style>
+  body {
+    background-color: #09090b; /* zinc-950 */
+    color: #ffffff;
+    min-height: 100vh;
+  }
+</style>
