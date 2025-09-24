@@ -1,12 +1,4 @@
 {
-  "version": 2,
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "regions": ["iad1"],
-  "routes": [
-    {
-      "src": "/api-test",
-      "dest": "/api-test"
-    }
-  ]
+  "framework": "astro",
+  "buildCommand": "npm run build"
 }
