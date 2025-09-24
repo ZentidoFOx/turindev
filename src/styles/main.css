@@ -462,13 +462,13 @@
 
 			/* Mobile Tech Grid */
 			.tech-grid {
-				grid-template-columns: repeat(2, 1fr);
-				gap: 10px;
-				max-width: 240px;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 8px;
+				max-width: 300px;
 			}
 
 			.tech-item {
-				padding: 10px 6px;
+				padding: 8px 4px;
 			}
 
 			.tech-icon {
