@@ -2,22 +2,17 @@
 import Layout from '../../layouts/Layout.astro';
 import { getActresses, type Actress } from '../../services/api';
 
-export async function getStaticPaths() {
-    const { data } = await getActresses();
-    
-    return data.map((actress) => {
-        return {
-            params: { actriz: actress.slug },
-            props: { actress },
-        };
-    });
-}
+// Obtener el parámetro de la URL
+const { actriz } = Astro.params;
 
-interface Props {
-    actress: Actress;
-}
+// Obtener todas las actrices y encontrar la que coincida con el slug
+const { data } = await getActresses();
+const actress = data.find(a => a.slug === actriz);
 
-const { actress } = Astro.props;
+// Si no se encuentra la actriz, redirigir a la página de lista
+if (!actress) {
+    return Astro.redirect('/actrices');
+}
 ---
 
 <Layout title={`${actress.name} - TurinDev`}>

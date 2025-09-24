@@ -34,13 +34,22 @@ const defaultOptions = {
  */
 export async function getActresses(): Promise<ApiResponse> {
     try {
-        const response = await fetch(`${API_URL}/api-actriz.php`, defaultOptions);
+        const response = await fetch(`${API_URL}/api-actriz.php`, {
+            ...defaultOptions,
+            cache: 'no-store' // Asegura que siempre obtengamos datos frescos
+        });
         
         if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
         }
         
         const data: ApiResponse = await response.json();
+        
+        // Validar la estructura de la respuesta
+        if (!data || !Array.isArray(data.data)) {
+            throw new Error('Formato de respuesta inválido');
+        }
+        
         return data;
     } catch (error) {
         console.error('Error fetching actresses:', error);
