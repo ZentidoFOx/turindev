@@ -1,11 +1,144 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import "../styles/main.css";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
-
 <Layout>
-	<Welcome />
+	<main class="min-h-screen bg-zinc-950 flex items-center justify-center px-4 relative overflow-hidden">
+		
+		<!-- Subtle Grid Background -->
+		<div class="absolute inset-0 opacity-20">
+			<div class="grid-pattern"></div>
+		</div>
+		
+		<!-- Main Content -->
+		<div class="text-center max-w-md mx-auto relative z-10">
+			
+			<!-- Logo Section -->
+			<div class="mb-12">
+				<div class="logo-container mb-6">
+					<!-- Logo Icon -->
+					<div class="logo-icon mb-4">
+						<div class="icon-container">
+							<div class="terminal-icon">
+								<div class="terminal-screen">
+									<div class="terminal-dot"></div>
+									<div class="terminal-line"></div>
+									<div class="terminal-line short"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Logo Text -->
+					<div class="logo-text-container">
+						<div class="logo-brackets">
+							<span class="bracket left">&lt;</span>
+							<h1 class="logo-main">
+								<span class="brand-name">Turin</span>
+								<span class="brand-dot">.</span>
+								<span class="brand-extension">Dev</span>
+							</h1>
+							<span class="bracket right">/&gt;</span>
+						</div>
+						<div class="logo-underline"></div>
+					</div>
+				</div>
+				
+				<!-- Developer Credit -->
+				<p class="text-zinc-400 text-sm font-mono tracking-wider">
+					By <span class="text-emerald-400">Arturo Cruz P.</span>
+				</p>
+			</div>
+
+			<!-- Status Card -->
+			<div class="status-card mb-8">
+				<div class="status-header">
+					<div class="status-dot"></div>
+					<span class="text-zinc-300 font-mono text-sm">estado.log</span>
+				</div>
+				
+				<div class="status-content">
+					<div class="status-line">
+						<span class="text-zinc-500">→</span>
+						<span class="text-zinc-300">Estado:</span>
+						<span class="text-yellow-400">En desarrollo</span>
+					</div>
+					
+					<div class="status-line">
+						<span class="text-zinc-500">→</span>
+						<span class="text-zinc-300">Progreso:</span>
+						<div class="progress-container">
+							<div class="progress-bar"></div>
+							<span class="text-emerald-400 text-sm">85%</span>
+						</div>
+					</div>
+					
+					<div class="status-line">
+						<span class="text-zinc-500">→</span>
+						<span class="text-zinc-300">Lanzamiento:</span>
+						<span class="text-emerald-400">Muy pronto</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Technologies Section -->
+			<div class="technologies-section mb-8">
+				<p class="text-zinc-400 text-sm mb-4 font-mono">Tecnologías</p>
+				<div class="tech-grid">
+					<div class="tech-item">
+						<div class="tech-icon react">⚛️</div>
+						<span class="tech-name">React</span>
+					</div>
+					<div class="tech-item">
+						<div class="tech-icon vue">🟢</div>
+						<span class="tech-name">Vue</span>
+					</div>
+					<div class="tech-item">
+						<div class="tech-icon next">▲</div>
+						<span class="tech-name">Next.js</span>
+					</div>
+					<div class="tech-item">
+						<div class="tech-icon astro">🚀</div>
+						<span class="tech-name">Astro</span>
+					</div>
+					<div class="tech-item">
+						<div class="tech-icon node">🟩</div>
+						<span class="tech-name">Node.js</span>
+					</div>
+					<div class="tech-item">
+						<div class="tech-icon ts">📘</div>
+						<span class="tech-name">TypeScript</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Contact Section -->
+			<div class="contact-section">
+				<p class="text-zinc-400 text-sm mb-4 font-mono">Contacto & Negocios</p>
+				<div class="contact-grid">
+					<a href="mailto:info@turin.dev" class="contact-link">
+						<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+							<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+						</svg>
+						<div>
+							<span class="contact-label">Email</span>
+							<span class="contact-value">info@turin.dev</span>
+						</div>
+					</a>
+					
+				</div>
+			</div>
+		</div>
+
+		<!-- Subtle Background Elements -->
+		<div class="absolute inset-0 pointer-events-none">
+			<div class="bg-element bg-element-1"></div>
+			<div class="bg-element bg-element-2"></div>
+			<div class="bg-element bg-element-3"></div>
+		</div>
+	</main>
+
 </Layout>

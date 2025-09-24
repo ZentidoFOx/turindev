@@ -1,22 +1,20 @@
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Bloquear indexación -->
+    <meta name="robots" content="noindex, nofollow" />
+    
+    <!-- SEO básico -->
+    <title>Turin.dev</title>
+    <meta name="description" content="Turin.dev - Proyecto de desarrollo con Astro y TailwindCSS." />
+  </head>
+  <body>
+    <slot />
+    <script src="../assets/js/main.js"></script>
+  </body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

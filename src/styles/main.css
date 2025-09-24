@@ -1,0 +1,492 @@
+/* Grid Pattern */
+		.grid-pattern {
+			background-image: 
+				linear-gradient(rgba(52, 211, 153, 0.1) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(52, 211, 153, 0.1) 1px, transparent 1px);
+			background-size: 40px 40px;
+			width: 100%;
+			height: 100%;
+		}
+
+		/* Logo Styles */
+		.logo-container {
+			animation: fadeInUp 1s ease-out;
+		}
+
+		/* Logo Icon */
+		.logo-icon {
+			display: flex;
+			justify-content: center;
+		}
+
+		.icon-container {
+			position: relative;
+			animation: iconFloat 3s ease-in-out infinite;
+		}
+
+		.terminal-icon {
+			width: 60px;
+			height: 40px;
+			background: linear-gradient(145deg, #1f2937, #111827);
+			border: 2px solid #22c55e;
+			border-radius: 8px;
+			position: relative;
+			box-shadow: 
+				0 0 20px rgba(34, 197, 94, 0.3),
+				inset 0 1px 0 rgba(255, 255, 255, 0.1);
+		}
+
+		.terminal-screen {
+			padding: 6px;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			gap: 2px;
+		}
+
+		.terminal-dot {
+			width: 4px;
+			height: 4px;
+			background: #22c55e;
+			border-radius: 50%;
+			animation: pulse 2s infinite;
+		}
+
+		.terminal-line {
+			height: 2px;
+			background: rgba(34, 197, 94, 0.6);
+			border-radius: 1px;
+			animation: lineGlow 2s ease-in-out infinite;
+		}
+
+		.terminal-line.short {
+			width: 70%;
+			animation-delay: 0.5s;
+		}
+
+		/* Logo Text */
+		.logo-text-container {
+			text-align: center;
+		}
+
+		.logo-brackets {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-bottom: 8px;
+		}
+
+		.bracket {
+			font-family: 'SF Mono', Monaco, monospace;
+			font-size: 2.5rem;
+			font-weight: bold;
+			color: #22c55e;
+			opacity: 0;
+			animation: bracketSlide 1s ease-out 0.5s forwards;
+		}
+
+		.bracket.left {
+			transform: translateX(-10px);
+		}
+
+		.bracket.right {
+			transform: translateX(10px);
+		}
+
+		.logo-main {
+			margin: 0 16px;
+			font-size: 2.8rem;
+			font-weight: 800;
+			font-family: 'Inter', system-ui, sans-serif;
+			letter-spacing: -0.02em;
+			opacity: 0;
+			animation: logoFadeIn 1s ease-out 0.8s forwards;
+		}
+
+		.brand-name {
+			background: linear-gradient(135deg, #ffffff, #e5e7eb);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+
+		.brand-dot {
+			color: #22c55e;
+			margin: 0 2px;
+			animation: dotPulse 2s ease-in-out infinite;
+		}
+
+		.brand-extension {
+			background: linear-gradient(135deg, #22c55e, #10b981);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+
+		.logo-underline {
+			height: 3px;
+			background: linear-gradient(90deg, transparent, #22c55e, transparent);
+			border-radius: 2px;
+			margin: 0 auto;
+			width: 0;
+			animation: underlineExpand 1s ease-out 1.2s forwards;
+		}
+
+		/* Logo Animations */
+		@keyframes iconFloat {
+			0%, 100% { transform: translateY(0px); }
+			50% { transform: translateY(-8px); }
+		}
+
+		@keyframes lineGlow {
+			0%, 100% { opacity: 0.6; }
+			50% { opacity: 1; box-shadow: 0 0 8px rgba(34, 197, 94, 0.8); }
+		}
+
+		@keyframes bracketSlide {
+			to {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		@keyframes logoFadeIn {
+			to {
+				opacity: 1;
+			}
+		}
+
+		@keyframes dotPulse {
+			0%, 100% { transform: scale(1); }
+			50% { transform: scale(1.2); }
+		}
+
+		@keyframes underlineExpand {
+			to {
+				width: 120px;
+			}
+		}
+
+		/* Hover Effects */
+		.logo-container:hover .terminal-icon {
+			transform: scale(1.05);
+			box-shadow: 
+				0 0 30px rgba(34, 197, 94, 0.5),
+				inset 0 1px 0 rgba(255, 255, 255, 0.1);
+		}
+
+		.logo-container:hover .bracket {
+			color: #10b981;
+		}
+
+		/* Status Card */
+		.status-card {
+			background: rgba(39, 39, 42, 0.5);
+			backdrop-filter: blur(10px);
+			border: 1px solid rgba(63, 63, 70, 0.5);
+			border-radius: 12px;
+			padding: 20px;
+			font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+			animation: fadeInUp 1s ease-out 0.3s both;
+		}
+
+		.status-header {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 16px;
+			padding-bottom: 8px;
+			border-bottom: 1px solid rgba(63, 63, 70, 0.3);
+		}
+
+		.status-dot {
+			width: 8px;
+			height: 8px;
+			background: #22c55e;
+			border-radius: 50%;
+			animation: pulse 2s infinite;
+		}
+
+		.status-content {
+			space-y: 8px;
+		}
+
+		.status-line {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			margin-bottom: 12px;
+			font-size: 14px;
+		}
+
+		/* Progress Bar */
+		.progress-container {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			flex: 1;
+		}
+
+		.progress-bar {
+			flex: 1;
+			height: 6px;
+			background: rgba(63, 63, 70, 0.5);
+			border-radius: 3px;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.progress-bar::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 100%;
+			width: 85%;
+			background: linear-gradient(90deg, #22c55e, #10b981);
+			border-radius: 3px;
+			animation: progressFill 2s ease-out 1s both;
+		}
+
+		/* Technologies Section */
+		.technologies-section {
+			animation: fadeInUp 1s ease-out 0.5s both;
+		}
+
+		.tech-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 12px;
+			max-width: 300px;
+			margin: 0 auto;
+		}
+
+		.tech-item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 6px;
+			padding: 12px 8px;
+			background: rgba(39, 39, 42, 0.3);
+			border: 1px solid rgba(63, 63, 70, 0.3);
+			border-radius: 8px;
+			transition: all 0.3s ease;
+			cursor: pointer;
+		}
+
+		.tech-item:hover {
+			background: rgba(39, 39, 42, 0.5);
+			border-color: rgba(52, 211, 153, 0.4);
+			transform: translateY(-2px);
+		}
+
+		.tech-icon {
+			font-size: 20px;
+			width: 32px;
+			height: 32px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 6px;
+			background: rgba(52, 211, 153, 0.1);
+			animation: techPulse 3s ease-in-out infinite;
+		}
+
+		.tech-icon.react { animation-delay: 0.1s; }
+		.tech-icon.vue { animation-delay: 0.2s; }
+		.tech-icon.next { animation-delay: 0.3s; }
+		.tech-icon.astro { animation-delay: 0.4s; }
+		.tech-icon.node { animation-delay: 0.5s; }
+		.tech-icon.ts { animation-delay: 0.6s; }
+
+		.tech-name {
+			font-size: 11px;
+			color: #a1a1aa;
+			font-family: 'SF Mono', Monaco, monospace;
+			text-align: center;
+		}
+
+		/* Contact Grid */
+		.contact-section {
+			animation: fadeInUp 1s ease-out 0.7s both;
+		}
+
+		.contact-grid {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			max-width: 320px;
+			margin: 0 auto;
+		}
+
+		.contact-link {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 14px 16px;
+			background: rgba(52, 211, 153, 0.08);
+			border: 1px solid rgba(52, 211, 153, 0.2);
+			border-radius: 10px;
+			color: #34d399;
+			text-decoration: none;
+			font-family: 'SF Mono', Monaco, monospace;
+			transition: all 0.3s ease;
+		}
+
+		.contact-link:hover {
+			background: rgba(52, 211, 153, 0.15);
+			border-color: rgba(52, 211, 153, 0.4);
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(52, 211, 153, 0.15);
+		}
+
+		.contact-label {
+			font-size: 11px;
+			color: #71717a;
+			display: block;
+		}
+
+		.contact-value {
+			font-size: 13px;
+			color: #34d399;
+			display: block;
+		}
+
+		/* Tech Animation */
+		@keyframes techPulse {
+			0%, 100% { 
+				background: rgba(52, 211, 153, 0.1);
+				transform: scale(1);
+			}
+			50% { 
+				background: rgba(52, 211, 153, 0.2);
+				transform: scale(1.05);
+			}
+		}
+
+		/* Background Elements */
+		.bg-element {
+			position: absolute;
+			background: radial-gradient(circle, rgba(52, 211, 153, 0.05) 0%, transparent 70%);
+			border-radius: 50%;
+			animation: float 8s ease-in-out infinite;
+		}
+
+		.bg-element-1 {
+			width: 200px;
+			height: 200px;
+			top: 10%;
+			left: 10%;
+			animation-delay: 0s;
+		}
+
+		.bg-element-2 {
+			width: 150px;
+			height: 150px;
+			bottom: 20%;
+			right: 15%;
+			animation-delay: 3s;
+		}
+
+		.bg-element-3 {
+			width: 120px;
+			height: 120px;
+			top: 60%;
+			left: 5%;
+			animation-delay: 6s;
+		}
+
+		/* Animations */
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes pulse {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.5; }
+		}
+
+		@keyframes progressFill {
+			from { width: 0%; }
+			to { width: 85%; }
+		}
+
+		@keyframes float {
+			0%, 100% {
+				transform: translateY(0px);
+				opacity: 0.5;
+			}
+			50% {
+				transform: translateY(-20px);
+				opacity: 0.8;
+			}
+		}
+
+		/* Responsive */
+		@media (max-width: 640px) {
+			.status-card {
+				padding: 16px;
+			}
+			
+			.status-line {
+				font-size: 13px;
+				flex-wrap: wrap;
+			}
+			
+			.progress-container {
+				width: 100%;
+				margin-top: 4px;
+			}
+			
+			/* Mobile Logo Adjustments */
+			.logo-main {
+				font-size: 2.2rem;
+			}
+			
+			.bracket {
+				font-size: 2rem;
+			}
+			
+			.terminal-icon {
+				width: 50px;
+				height: 35px;
+			}
+
+			/* Mobile Tech Grid */
+			.tech-grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 10px;
+				max-width: 240px;
+			}
+
+			.tech-item {
+				padding: 10px 6px;
+			}
+
+			.tech-icon {
+				font-size: 16px;
+				width: 28px;
+				height: 28px;
+			}
+
+			.tech-name {
+				font-size: 10px;
+			}
+
+			/* Mobile Contact */
+			.contact-grid {
+				max-width: 280px;
+			}
+
+			.contact-link {
+				padding: 12px 14px;
+			}
+		}
