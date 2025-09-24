@@ -6,7 +6,19 @@ import vercel from '@astrojs/vercel/serverless';
 // https://astro.build/config
 export default defineConfig({
     output: 'server',
-    adapter: vercel(),
+    adapter: vercel({
+        webAnalytics: {
+            enabled: true,
+        },
+        speedInsights: {
+            enabled: true,
+        },
+        devMode: false,
+        includedFiles: ['**/*'],
+        serverless: {
+            maxDuration: 60
+        }
+    }),
     vite: {
         plugins: [tailwindcss()],
     },
