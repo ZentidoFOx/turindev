@@ -803,6 +803,19 @@ function createHeroTimeline() {
     console.log('Hero timeline already created, skipping...');
     return null;
   }
+  
+  // Verify that key elements exist before creating timeline
+  const heroTitle = document.querySelector('.hero-title');
+  if (!heroTitle) {
+    console.warn('Hero elements not found, delaying timeline creation...');
+    setTimeout(() => {
+      if (!heroTimelineCreated) {
+        createHeroTimeline();
+      }
+    }, 500);
+    return null;
+  }
+  
   const tl = gsap.timeline({ defaults: { ease: EASING_PRESETS.smooth } });
 
   // Set initial states to prevent FOUC and reverse animations
@@ -883,6 +896,15 @@ function createBackgroundAnimations() {
     console.log('Background animations already created, skipping...');
     return null;
   }
+  
+  // Verify that background elements exist
+  const backgroundElements = document.querySelector('.blur-2xl, .blur-3xl, .animate-bounce');
+  if (!backgroundElements) {
+    console.warn('Background elements not found, skipping background animations...');
+    backgroundAnimationsCreated = true; // Mark as created to prevent retries
+    return null;
+  }
+  
   const tl = gsap.timeline();
 
   // Set initial state
@@ -1181,25 +1203,35 @@ function initGSAPAnimations() {
     console.log('GSAP already initialized, skipping...');
     return;
   }
+  
+  console.log('Checking GSAP availability...', {
+    gsap: typeof gsap !== 'undefined',
+    ScrollTrigger: typeof ScrollTrigger !== 'undefined',
+    Draggable: typeof Draggable !== 'undefined'
+  });
+  
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof Draggable !== 'undefined') {
     try {
       // Initialize all GSAP components in the correct order
       console.log('Initializing all GSAP animations...');
       
       // 1. Initialize main Hero and background animations
+      console.log('Step 1: Initializing Hero and background animations');
       initializeGSAPAnimations();
       
       // 2. Initialize Portfolio functionality
+      console.log('Step 2: Initializing Portfolio functionality');
       initGSAPPortfolio();
       
       // 3. Initialize Testimonials slider
+      console.log('Step 3: Initializing Testimonials slider');
       initGSAPTestimonials();
       
       // Mark as initialized to prevent duplicate runs
       gsapInitialized = true;
-      console.log('All GSAP animations initialized successfully from node_modules');
+      console.log('✅ All GSAP animations initialized successfully from node_modules');
     } catch (error) {
-      console.error('Error initializing GSAP animations:', error);
+      console.error('❌ Error initializing GSAP animations:', error);
       // Fallback: try to initialize draggable only if Draggable is available
       if (typeof Draggable !== 'undefined') {
         setTimeout(() => {
@@ -1208,15 +1240,28 @@ function initGSAPAnimations() {
       }
     }
   } else {
-    console.warn('GSAP not available. Animations will not work.');
+    console.warn('⚠️ GSAP not available. Animations will not work.');
   }
 }
 
-// Listen for GSAP ready event
+// Listen for GSAP ready event with additional safety checks
 document.addEventListener('gsapReady', function() {
   console.log('GSAP ready event received');
-  initGSAPAnimations();
+  // Use requestAnimationFrame to ensure proper timing
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      initGSAPAnimations();
+    }, 100);
+  });
 });
+
+// Fallback: Initialize GSAP after a timeout if event doesn't fire
+setTimeout(() => {
+  if (!gsapInitialized && typeof gsap !== 'undefined') {
+    console.log('GSAP fallback initialization triggered');
+    initGSAPAnimations();
+  }
+}, 2000);
 
 // ==========================================
 // INITIALIZATION

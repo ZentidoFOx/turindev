@@ -8,17 +8,25 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import { Draggable } from 'gsap/Draggable';
 
-  // Register plugins
-  gsap.registerPlugin(ScrollTrigger, Draggable);
+  // Prevent multiple initializations
+  if (!(window as any).gsapLoaded) {
+    // Register plugins
+    gsap.registerPlugin(ScrollTrigger, Draggable);
 
-  // Make GSAP available globally for main.js
-  (window as any).gsap = gsap;
-  (window as any).ScrollTrigger = ScrollTrigger;
-  (window as any).Draggable = Draggable;
+    // Make GSAP available globally for main.js
+    (window as any).gsap = gsap;
+    (window as any).ScrollTrigger = ScrollTrigger;
+    (window as any).Draggable = Draggable;
+    
+    // Mark as loaded to prevent duplicate loading
+    (window as any).gsapLoaded = true;
 
-  console.log('GSAP loaded from node_modules successfully');
-  
-  // Trigger custom event to notify main.js that GSAP is ready
-  const gsapReadyEvent = new CustomEvent('gsapReady');
-  document.dispatchEvent(gsapReadyEvent);
+    console.log('GSAP loaded from node_modules successfully');
+    
+    // Trigger custom event to notify main.js that GSAP is ready
+    const gsapReadyEvent = new CustomEvent('gsapReady');
+    document.dispatchEvent(gsapReadyEvent);
+  } else {
+    console.log('GSAP already loaded, skipping initialization');
+  }
 </script>
