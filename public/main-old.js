@@ -10,14 +10,16 @@
 // 1. UTILITY FUNCTIONS
 // 2. HEADER FUNCTIONALITY  
 // 3. CURSOR GLOW EFFECT
-// 4. CONTACT FORM FUNCTIONALITY
-// 5. INITIALIZATION
-// 
-// NOTE: All GSAP animations are now handled in GSAPLoader.astro
+// 4. GSAP ANIMATION SYSTEM
+// 5. PORTFOLIO FUNCTIONALITY - GSAP POWERED
+// 6. TESTIMONIALS FUNCTIONALITY - GSAP POWERED
+// 7. CONTACT FORM FUNCTIONALITY
+// 8. INITIALIZATION
 
 // ==========================================
 // 1. UTILITY FUNCTIONS
 // ==========================================
+
 // DOM Utilities
 const DOM = {
   // Safe element selection with optional parent
