@@ -1,0 +1,24 @@
+---
+// GSAP Loader Component
+---
+
+<script>
+  // Import GSAP from node_modules
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { Draggable } from 'gsap/Draggable';
+
+  // Register plugins
+  gsap.registerPlugin(ScrollTrigger, Draggable);
+
+  // Make GSAP available globally for main.js
+  (window as any).gsap = gsap;
+  (window as any).ScrollTrigger = ScrollTrigger;
+  (window as any).Draggable = Draggable;
+
+  console.log('GSAP loaded from node_modules successfully');
+  
+  // Trigger custom event to notify main.js that GSAP is ready
+  const gsapReadyEvent = new CustomEvent('gsapReady');
+  document.dispatchEvent(gsapReadyEvent);
+</script>

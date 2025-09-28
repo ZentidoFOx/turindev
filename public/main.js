@@ -1155,14 +1155,14 @@ function initGSAPCounters() {
 // ==========================================
 // GSAP INITIALIZATION HELPER
 // ==========================================
-function initGSAPWhenReady(retryCount = 0) {
-  const maxRetries = 50;
-  
+function initGSAPAnimations() {
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof Draggable !== 'undefined') {
     try {
-      gsap.registerPlugin(ScrollTrigger, Draggable);
+      // GSAP is already registered in gsap-init.js
       initializeGSAPAnimations();
+      console.log('GSAP animations initialized successfully from node_modules');
     } catch (error) {
+      console.error('Error initializing GSAP animations:', error);
       // Fallback: try to initialize draggable only if Draggable is available
       if (typeof Draggable !== 'undefined') {
         setTimeout(() => {
@@ -1170,18 +1170,16 @@ function initGSAPWhenReady(retryCount = 0) {
         }, 2500);
       }
     }
-  } else if (retryCount < maxRetries) {
-    // Retry after a short delay if GSAP is not ready
-    setTimeout(() => initGSAPWhenReady(retryCount + 1), 100);
   } else {
-    // Last attempt: try to initialize draggable only if available
-    if (typeof Draggable !== 'undefined') {
-      setTimeout(() => {
-        initTechCarouselDraggable();
-      }, 3000);
-    }
+    console.warn('GSAP not available. Animations will not work.');
   }
 }
+
+// Listen for GSAP ready event
+document.addEventListener('gsapReady', function() {
+  console.log('GSAP ready event received');
+  initGSAPAnimations();
+});
 
 // ==========================================
 // INITIALIZATION
@@ -1196,13 +1194,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initGSAPTestimonials();
   initContactForm();
   
-  // Initialize GSAP animations with retry mechanism
-  initGSAPWhenReady();
-  
-  // Also try to initialize draggable independently after a delay
-  setTimeout(() => {
-    if (typeof Draggable !== 'undefined') {
-      initTechCarouselDraggable();
-    }
-  }, 4000);
+  // GSAP will be initialized via the 'gsapReady' event from gsap-init.js
+  console.log('DOM loaded, waiting for GSAP to be ready...');
 });
