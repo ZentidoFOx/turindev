@@ -1,7 +1,13 @@
-// Main JavaScript - Header, Mouse Glow and Animation Utilities
+// Main JavaScript - Critical functionality only
+// Initialize immediately for better FCP
+initHeader();
+
+// Defer non-critical features
 document.addEventListener('DOMContentLoaded', function() {
-  initHeader();
-  initMouseGlow();
+  // Only init mouse glow after DOM is ready
+  if (window.innerWidth > 768) { // Only on desktop
+    initMouseGlow();
+  }
 });
 
 // ========================================

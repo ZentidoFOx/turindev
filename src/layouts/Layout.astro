@@ -11,11 +11,53 @@ import Icons from "../components/Icons.astro";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     
-    <!-- Critical CSS - Load fonts early -->
-    <link rel="stylesheet" href="/fonts/inter-local.css">
+    <!-- Preload critical fonts first -->
+    <link rel="preload" href="/fonts/inter-400.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="/fonts/inter-600.ttf" as="font" type="font/ttf" crossorigin>
     
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/images/bg.avif" as="image" type="image/avif">
+    <!-- Critical CSS - Inline for faster FCP -->
+    <style>
+      @font-face {
+        font-family: 'Inter';
+        font-weight: 400;
+        font-display: swap;
+        src: url('/fonts/inter-400.ttf') format('truetype');
+      }
+      @font-face {
+        font-family: 'Inter';
+        font-weight: 600;
+        font-display: swap;
+        src: url('/fonts/inter-600.ttf') format('truetype');
+      }
+      
+      /* Critical above-the-fold styles */
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: #020617;
+        color: #fff;
+        margin: 0;
+        overflow-x: hidden;
+      }
+      
+      .hero-section {
+        min-height: 100vh;
+        position: relative;
+        padding-top: 3rem;
+      }
+      
+      .hero-title {
+        font-size: clamp(2rem, 8vw, 4.5rem);
+        font-weight: 700;
+        line-height: 1.1;
+        margin: 0;
+      }
+    </style>
+    
+    <!-- Non-critical CSS - Load async -->
+    <link rel="stylesheet" href="/fonts/inter-local.css" media="print" onload="this.media='all'">
+    
+    <!-- Defer non-critical image loading -->
+    <link rel="prefetch" href="/images/bg.avif" as="image" type="image/avif">
     
     <!-- Bloquear indexación -->
     <meta name="robots" content="noindex, nofollow" />
@@ -35,44 +77,42 @@ import Icons from "../components/Icons.astro";
     <Icons />
     <slot />
     
-    <!-- Critical performance script -->
+    <!-- Critical performance script - Optimized -->
     <script is:inline>
-      // Load background image after critical content
-      window.addEventListener('load', function() {
-        document.body.classList.add('loaded');
-      });
+      // Immediate critical content display
+      document.documentElement.style.setProperty('--bg-opacity', '0');
+      
+      // Load background image after FCP
+      function loadBackgroundImage() {
+        const img = new Image();
+        img.onload = function() {
+          document.body.classList.add('loaded');
+          document.documentElement.style.setProperty('--bg-opacity', '1');
+        };
+        img.src = '/images/bg.avif';
+      }
+      
+      // Load after critical content
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          setTimeout(loadBackgroundImage, 100);
+        });
+      } else {
+        setTimeout(loadBackgroundImage, 100);
+      }
       
       // Fallback for slow connections
-      setTimeout(function() {
+      setTimeout(() => {
         document.body.classList.add('loaded');
-      }, 2000);
+        document.documentElement.style.setProperty('--bg-opacity', '1');
+      }, 3000);
     </script>
     
-    <!-- GSAP Library -->
-    <script>
-      import { gsap } from 'gsap';
-      import { ScrollTrigger } from 'gsap/ScrollTrigger';
-      import { Draggable } from 'gsap/Draggable';
-      
-      // Register GSAP plugins
-      gsap.registerPlugin(ScrollTrigger, Draggable);
-      
-      // Make GSAP available globally
-      (globalThis as any).gsap = gsap;
-      (globalThis as any).ScrollTrigger = ScrollTrigger;
-      (globalThis as any).Draggable = Draggable;
-      
-      // Dispatch event when GSAP is ready
-      document.addEventListener('DOMContentLoaded', () => {
-        document.dispatchEvent(new CustomEvent('gsapReady'));
-      });
-    </script>
-    
-    <!-- Main JavaScript -->
+    <!-- Main JavaScript - Carga inmediata -->
     <script is:inline src="/main.js"></script>
     
-    <!-- GSAP Animation System -->
-    <script is:inline src="/js/gsap-init.js"></script>
+    <!-- GSAP Animation System - Carga diferida -->
+    <script is:inline src="/js/gsap-init.js" defer></script>
   </body>
 </html>
 
