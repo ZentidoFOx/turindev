@@ -1,351 +1,672 @@
-/**
- * TurinDEV - Main JavaScript File
- * Código optimizado solo con funcionalidades necesarias
+/*
+ * Turin.dev - Main JavaScript File
+ * Handles all interactive functionality for the website
+ * GSAP scripts are loaded via CDN in Layout.astro
  */
 
-// Cargar GSAP y ScrollTrigger
-const script1 = document.createElement('script');
-script1.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js';
-document.head.appendChild(script1);
+// ==========================================
+// TABLE OF CONTENTS
+// ==========================================
+// 1. UTILITY FUNCTIONS
+// 2. HEADER FUNCTIONALITY  
+// 3. CURSOR GLOW EFFECT
+// 4. GSAP ANIMATION SYSTEM
+// 5. PORTFOLIO FUNCTIONALITY - GSAP POWERED
+// 6. TESTIMONIALS FUNCTIONALITY - GSAP POWERED
+// 7. CONTACT FORM FUNCTIONALITY
+// 8. INITIALIZATION
 
-const script2 = document.createElement('script');
-script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js';
-document.head.appendChild(script2);
+// ==========================================
+// 1. UTILITY FUNCTIONS
+// ==========================================
 
-script2.onload = function() {
-  gsap.registerPlugin(ScrollTrigger);
-  initializeGSAPAnimations();
+// DOM Utilities
+const DOM = {
+  // Safe element selection with optional parent
+  select: (selector, parent = document) => parent.querySelector(selector),
+  selectAll: (selector, parent = document) => Array.from(parent.querySelectorAll(selector)),
+  
+  // Check if element exists
+  exists: (selector, parent = document) => !!parent.querySelector(selector),
+  
+  // Add event listener with cleanup tracking
+  on: (element, event, handler, options = {}) => {
+    if (!element) return null;
+    element.addEventListener(event, handler, options);
+    return () => element.removeEventListener(event, handler, options);
+  },
+  
+  // Toggle class utility
+  toggleClass: (element, className, condition) => {
+    if (!element) return;
+    element.classList.toggle(className, condition);
+  },
+  
+  // Set multiple styles at once
+  setStyles: (element, styles) => {
+    if (!element || !styles) return;
+    Object.assign(element.style, styles);
+  }
 };
 
+// Animation Utilities
+const AnimUtils = {
+  // Debounce function for performance
+  debounce: (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  },
+  
+  // Throttle function for scroll events
+  throttle: (func, limit) => {
+    let inThrottle;
+    return function(...args) {
+      if (!inThrottle) {
+        func.apply(this, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
+      }
+    };
+  },
+  
+  // Check if element is in viewport
+  isInViewport: (element, threshold = 0) => {
+    if (!element) return false;
+    const rect = element.getBoundingClientRect();
+    return (
+      rect.top >= -threshold &&
+      rect.left >= -threshold &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + threshold &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth) + threshold
+    );
+  }
+};
+
+// GSAP Utilities
+const GSAPUtils = {
+  // Check if GSAP is available
+  isAvailable: () => typeof gsap !== 'undefined',
+  
+  // Safe GSAP set with fallback
+  safeSet: (target, props) => {
+    if (GSAPUtils.isAvailable()) {
+      gsap.set(target, props);
+    }
+  },
+  
+  // Safe GSAP animation with fallback
+  safeAnimate: (target, props, fallback = null) => {
+    if (GSAPUtils.isAvailable()) {
+      return gsap.to(target, props);
+    } else if (fallback) {
+      fallback();
+    }
+    return null;
+  },
+  
+  // Kill animation safely
+  safeKill: (animation) => {
+    if (animation && animation.kill) {
+      animation.kill();
+    }
+  }
+};
+
+
 // ==========================================
-// 1. HEADER FUNCTIONALITY
+// 2. HEADER FUNCTIONALITY
 // ==========================================
 function initHeader() {
-  const header = document.getElementById("main-header");
-  const toggleButton = document.getElementById("header-navbar-toggle");
-  const navbar = document.getElementById("header-navbar");
-  const overlay = document.getElementById("mobile-overlay");
+  const header = DOM.select("#main-header");
+  const toggleButton = DOM.select("#header-navbar-toggle");
+  const navbar = DOM.select("#header-navbar");
+  const overlay = DOM.select("#mobile-overlay");
   let lastScrollY = window.scrollY;
 
-  function handleScroll() {
+  // Optimized scroll handler with throttling
+  const handleScroll = AnimUtils.throttle(() => {
     const currentScrollY = window.scrollY;
+    DOM.toggleClass(header, "header-scrolled", currentScrollY > 50);
+    lastScrollY = currentScrollY;
+  }, 16); // ~60fps
 
-    if (header) {
-      if (currentScrollY > 50) {
-        header.classList.add("header-scrolled");
+  const setMenuState = (isOpen) => {
+    if (!toggleButton || !navbar) return;
+
+    toggleButton.setAttribute("aria-expanded", isOpen.toString());
+    navbar.setAttribute("data-open", isOpen.toString());
+    
+    if (overlay) {
+      if (isOpen) {
+        DOM.setStyles(overlay, { display: "block" });
+        setTimeout(() => DOM.setStyles(overlay, { opacity: "1" }), 10);
       } else {
-        header.classList.remove("header-scrolled");
+        DOM.setStyles(overlay, { opacity: "0" });
+        setTimeout(() => DOM.setStyles(overlay, { display: "none" }), 300);
       }
     }
+  };
 
-    lastScrollY = currentScrollY;
-  }
+  const openMobileMenu = () => setMenuState(true);
+  const closeMobileMenu = () => setMenuState(false);
 
-  function toggleMobileMenu() {
+  const toggleMobileMenu = () => {
     if (!toggleButton) return;
-
     const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
+    isExpanded ? closeMobileMenu() : openMobileMenu();
+  };
 
-    if (isExpanded) {
-      closeMobileMenu();
-    } else {
-      openMobileMenu();
-    }
-  }
+  // Event listeners with cleanup tracking
+  const cleanupFunctions = [
+    DOM.on(overlay, "click", closeMobileMenu),
+    DOM.on(toggleButton, "click", toggleMobileMenu),
+    DOM.on(window, "scroll", handleScroll, { passive: true }),
+    DOM.on(window, "resize", AnimUtils.debounce(() => {
+      if (window.innerWidth >= 768) {
+        closeMobileMenu();
+      }
+    }, 250))
+  ].filter(Boolean);
 
-  function openMobileMenu() {
-    if (!overlay || !toggleButton || !navbar) return;
-
-    // 1. Primero mostrar overlay
-    overlay.classList.remove("invisible");
-
-    // 2. Animar overlay después de un frame
-    requestAnimationFrame(() => {
-      overlay.classList.remove("opacity-0");
-      overlay.classList.add("opacity-100");
-    });
-
-    // 3. Después abrir menú
-    setTimeout(() => {
-      toggleButton.setAttribute("aria-expanded", "true");
-      navbar.setAttribute("data-open", "");
-      document.body.style.overflow = "hidden";
-    }, 100);
-  }
-
-  function closeMobileMenu() {
-    if (!overlay || !toggleButton || !navbar) return;
-
-    // 1. Primero cerrar menú
-    toggleButton.setAttribute("aria-expanded", "false");
-    navbar.removeAttribute("data-open");
-
-    // 2. Después animar overlay
-    setTimeout(() => {
-      overlay.classList.remove("opacity-100");
-      overlay.classList.add("opacity-0");
-
-      // 3. Finalmente ocultar overlay y restaurar scroll
-      setTimeout(() => {
-        overlay.classList.add("invisible");
-        document.body.style.overflow = "";
-      }, 500);
-    }, 200);
-  }
-
-  // Event listeners
-  if (overlay) {
-    overlay.addEventListener("click", closeMobileMenu);
-  }
-
-  if (toggleButton) {
-    toggleButton.addEventListener("click", toggleMobileMenu);
-  }
-
-  window.addEventListener("scroll", handleScroll, { passive: true });
-
-  // Cerrar menú al hacer click en un enlace (móvil)
-  if (navbar) {
-    const mobileLinks = navbar.querySelectorAll("a");
-    mobileLinks.forEach((link) => {
-      link.addEventListener("click", () => {
+  // Close menu when clicking mobile links
+  DOM.selectAll("a", navbar).forEach(link => {
+    cleanupFunctions.push(
+      DOM.on(link, "click", () => {
         if (window.innerWidth < 768) {
           closeMobileMenu();
         }
-      });
-    });
-  }
-
-  // Cerrar menú al redimensionar ventana
-  window.addEventListener("resize", () => {
-    if (window.innerWidth >= 768) {
-      closeMobileMenu();
-    }
+      })
+    );
   });
 
-  // Llamar una vez al cargar para establecer estado inicial
+  // Initialize scroll state
   handleScroll();
+
+  // Return cleanup function for potential use
+  return () => cleanupFunctions.forEach(cleanup => cleanup && cleanup());
 }
 
 // ==========================================
-// 2. HERO COUNTER ANIMATION
+// 3. CURSOR GLOW EFFECT
 // ==========================================
-function initHeroCounters() {
-  const counters = document.querySelectorAll('.counter');
+function initCursorGlow() {
+  const cursorGlow = DOM.select('#cursor-glow');
   
-  const animateCounter = (counter) => {
-    const targetAttr = counter.getAttribute('data-target');
-    const target = parseInt(targetAttr || '0');
-    const suffix = counter.getAttribute('data-suffix');
-    const duration = 2000; // 2 seconds
-    const increment = target / (duration / 16); // 60fps
-    let current = 0;
+  if (!cursorGlow) return;
+  
+  // Only activate on devices with cursor (not touch)
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    return;
+  }
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let isMoving = false;
+
+  // Optimized mouse move handler with throttling
+  const handleMouseMove = AnimUtils.throttle((e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
     
-    const updateCounter = () => {
-      current += increment;
-      
-      if (current >= target) {
-        current = target;
-      }
-      
-      // Format the number based on suffix
-      if (suffix === 'K') {
-        const value = (current / 1000).toFixed(1);
-        counter.innerHTML = `${value}<span class="text-green-400 group-hover:text-green-300">K</span>`;
-      } else if (counter.innerHTML.includes('+')) {
-        counter.innerHTML = `${Math.floor(current)}<span class="text-green-400 group-hover:text-green-300">+</span>`;
-      } else {
-        counter.textContent = Math.floor(current).toString();
-      }
-      
-      if (current < target) {
-        requestAnimationFrame(updateCounter);
-      }
-    };
+    if (!isMoving) {
+      isMoving = true;
+      DOM.setStyles(cursorGlow, { opacity: '1' });
+    }
     
-    updateCounter();
+    // Use transform for better performance
+    DOM.setStyles(cursorGlow, {
+      transform: `translate(${mouseX - 250}px, ${mouseY - 250}px)`
+    });
+  }, 16); // ~60fps
+
+  // Hide glow when mouse leaves
+  const handleMouseLeave = () => {
+    isMoving = false;
+    DOM.setStyles(cursorGlow, { opacity: '0' });
+  };
+
+  // Event listeners
+  return [
+    DOM.on(document, 'mousemove', handleMouseMove),
+    DOM.on(document, 'mouseleave', handleMouseLeave)
+  ].filter(Boolean);
+}
+
+// ==========================================
+// 4. PORTFOLIO FUNCTIONALITY - GSAP POWERED
+// ==========================================
+function initGSAPPortfolio() {
+  const tabButtons = DOM.selectAll('.portfolio-tab');
+  const projectItems = DOM.selectAll('.portfolio-item');
+  const grid = DOM.select('.projects-grid');
+  
+  if (!tabButtons.length || !projectItems.length || !grid) return;
+  
+  // GSAP filter function with layout reorganization
+  const filterProjects = (filter) => {
+    // Get items to show/hide
+    const itemsToHide = projectItems.filter(item => {
+      if (filter === '*') return false;
+      return !item.classList.contains(filter.replace('.', ''));
+    });
+    
+    const itemsToShow = projectItems.filter(item => {
+      if (filter === '*') return true;
+      return item.classList.contains(filter.replace('.', ''));
+    });
+    
+    // Create GSAP timeline for smooth filtering
+    const tl = gsap.timeline();
+    
+    // First, animate out all items
+    tl.to(projectItems, {
+      opacity: 0,
+      y: 30,
+      scale: 0.9,
+      duration: 0.3,
+      ease: "power2.inOut",
+      stagger: 0.03
+    });
+    
+    // Then reorganize the DOM and animate in visible items
+    tl.call(() => {
+      // Hide filtered out items completely
+      itemsToHide.forEach(item => {
+        item.style.display = 'none';
+        item.classList.add('filtered-out');
+      });
+      
+      // Show and prepare visible items
+      itemsToShow.forEach((item, index) => {
+        item.style.display = 'block';
+        item.classList.remove('filtered-out');
+        
+        // Set initial state for animation
+        gsap.set(item, { 
+          opacity: 0, 
+          y: 50, 
+          scale: 0.8,
+          rotation: Math.random() * 10 - 5 // Small random rotation
+        });
+      });
+    });
+    
+    // Animate in visible items with enhanced effects
+    tl.to(itemsToShow, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      rotation: 0,
+      duration: 0.6,
+      ease: "back.out(1.4)",
+      stagger: {
+        amount: 0.3,
+        from: "start"
+      }
+    }, "+=0.1");
+    
+    // Add a subtle bounce effect
+    tl.to(itemsToShow, {
+      scale: 1.02,
+      duration: 0.1,
+      ease: "power2.out",
+      stagger: 0.05,
+      yoyo: true,
+      repeat: 1
+    }, "-=0.2");
+    
+    return tl;
   };
   
-  // Intersection Observer to trigger animation when visible
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-        entry.target.classList.add('animated');
-        setTimeout(() => {
-          animateCounter(entry.target);
-        }, 1600); // Delay to sync with fade-in animation
-      }
+  const setActiveTab = (activeButton) => {
+    // Remove active class from all tabs with animation
+    tabButtons.forEach(btn => {
+      btn.classList.remove('active');
+      gsap.to(btn, { scale: 1, duration: 0.2, ease: "power2.out" });
     });
-  }, {
-    threshold: 0.5
-  });
+    
+    // Add active class to clicked tab with animation
+    activeButton.classList.add('active');
+    gsap.to(activeButton, { 
+      scale: 1.05, 
+      duration: 0.2, 
+      ease: "back.out(1.7)",
+      yoyo: true,
+      repeat: 1
+    });
+  };
   
-  counters.forEach(counter => {
-    observer.observe(counter);
+  // Event listeners with cleanup tracking
+  const cleanupFunctions = [];
+  tabButtons.forEach(button => {
+    cleanupFunctions.push(
+      DOM.on(button, 'click', (e) => {
+        e.preventDefault();
+        const filter = button.getAttribute('data-filter') || '*';
+        
+        // Prevent multiple clicks during animation
+        if (button.classList.contains('animating')) return;
+        
+        button.classList.add('animating');
+        setActiveTab(button);
+        
+        const filterTL = filterProjects(filter);
+        filterTL.call(() => {
+          button.classList.remove('animating');
+        });
+      })
+    );
   });
-}
 
-// ==========================================
-// 3. PORTFOLIO TABS & FILTERING
-// ==========================================
-function initPortfolio() {
-  const tabButtons = document.querySelectorAll('.tab-btn');
-  const projectItems = document.querySelectorAll('[data-category]');
-  
-  // Agregar clase para animaciones
-  projectItems.forEach(item => {
-    item.classList.add('project-item');
-  });
-  
-  function filterProjects(category) {
-    // Primero ocultar todos los proyectos
+  // Initialize with first tab (show all)
+  if (tabButtons.length > 0) {
+    const firstTab = tabButtons[0];
+    setActiveTab(firstTab);
+    
+    // Set initial state for all items
+    gsap.set(projectItems, { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0,
+      rotation: 0,
+      display: 'block'
+    });
+    
+    // Remove any filtered-out classes
     projectItems.forEach(item => {
-      item.classList.add('hidden');
-      item.classList.remove('fade-in');
+      item.classList.remove('filtered-out');
+      item.style.display = 'block';
     });
-    
-    // Después de un pequeño delay, mostrar los proyectos filtrados con animación escalonada
-    setTimeout(() => {
-      const visibleItems = [];
-      
-      projectItems.forEach(item => {
-        const itemCategories = item.getAttribute('data-category')?.split(' ') || [];
-        
-        if (category === 'todo' || itemCategories.includes(category)) {
-          visibleItems.push(item);
-        }
-      });
-      
-      // Mostrar elementos con delay escalonado
-      visibleItems.forEach((item, index) => {
-        setTimeout(() => {
-          item.classList.remove('hidden');
-          item.classList.add('fade-in');
-          
-          // Remover la clase fade-in después de la animación
-          setTimeout(() => {
-            item.classList.remove('fade-in');
-          }, 600);
-        }, index * 100); // 100ms de delay entre cada elemento
-      });
-    }, 150); // Delay inicial para que se complete la animación de salida
   }
-  
-  function setActiveTab(activeButton) {
-    tabButtons.forEach(btn => btn.classList.remove('active'));
-    activeButton.classList.add('active');
-  }
-  
-  tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const category = button.getAttribute('data-tab') || 'todo';
-      setActiveTab(button);
-      filterProjects(category);
-    });
-  });
+
+  return () => cleanupFunctions.forEach(cleanup => cleanup && cleanup());
 }
 
 // ==========================================
-// 4. SKILLS TABS & FILTERING
+// 5. TESTIMONIALS SLIDER - GSAP POWERED
 // ==========================================
-function initSkills() {
-  const tabButtons = document.querySelectorAll('.skill-tab-btn');
-  const skillCategories = document.querySelectorAll('.skill-category');
-  
-  function filterSkills(category) {
-    // Primero ocultar todas las categorías
-    skillCategories.forEach(cat => {
-      cat.classList.add('hidden');
-      cat.classList.remove('fade-in');
-    });
-    
-    // Después de un pequeño delay, mostrar la categoría seleccionada
-    setTimeout(() => {
-      const targetCategory = document.querySelector(`[data-category="${category}"]`);
-      if (targetCategory) {
-        targetCategory.classList.remove('hidden');
-        targetCategory.classList.add('fade-in');
-        
-        // Remover la clase fade-in después de la animación
-        setTimeout(() => {
-          targetCategory.classList.remove('fade-in');
-        }, 600);
-      }
-    }, 150);
+function initGSAPTestimonials() {
+  // Safety check for GSAP availability
+  if (!GSAPUtils.isAvailable()) {
+    console.warn('GSAP not available for testimonials');
+    return;
   }
-  
-  function setActiveTab(activeButton) {
-    tabButtons.forEach(btn => btn.classList.remove('active'));
-    activeButton.classList.add('active');
-  }
-  
-  tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const category = button.getAttribute('data-tab') || 'frontend';
-      setActiveTab(button);
-      filterSkills(category);
-    });
-  });
-}
 
-// ==========================================
-// 5. TESTIMONIALS SLIDER
-// ==========================================
-function initTestimonials() {
-  const track = document.querySelector('.testimonials-track');
-  const dots = document.querySelectorAll('.slider-dot');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
+  const track = DOM.select('.testimonials-track');
+  const dots = DOM.selectAll('.testimonial-dot');
+  const prevBtn = DOM.select('#testimonialPrevBtn');
+  const nextBtn = DOM.select('#testimonialNextBtn');
+  const slider = DOM.select('.testimonials-slider');
+  const testimonialItems = DOM.selectAll('.testimonial-item');
+  
+  if (!track || !dots.length || !prevBtn || !nextBtn || !slider || !testimonialItems.length) {
+    console.warn('Testimonials elements not found');
+    return;
+  }
   
   let currentSlide = 0;
   const totalSlides = 3;
+  let autoplayTimer = null;
+  let isAnimating = false;
+  let isPaused = false;
   
-  function updateSlider() {
+  // GSAP timeline for smooth transitions
+  const slideToIndex = (index, direction = 'next') => {
+    if (isAnimating || index === currentSlide) return;
+    
+    isAnimating = true;
+    const tl = gsap.timeline({
+      onComplete: () => {
+        isAnimating = false;
+        currentSlide = index;
+        updateControls();
+        startAutoplay();
+      }
+    });
+    
+    // Animate track movement
+    const translateX = -index * (100 / totalSlides);
     if (track) {
-      const translateX = -currentSlide * (100 / totalSlides);
-      track.style.transform = `translateX(${translateX}%)`;
+      tl.to(track, {
+        x: `${translateX}%`,
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
     }
     
-    // Actualizar dots
+    // Animate testimonial items with stagger
+    const currentItem = testimonialItems[currentSlide];
+    const nextItem = testimonialItems[index];
+    
+    if (currentItem) {
+      // Fade out current item
+      tl.to(currentItem, {
+        opacity: 0.7,
+        scale: 0.95,
+        duration: 0.4,
+        ease: "power2.out"
+      }, 0);
+    }
+    
+    if (nextItem) {
+      // Fade in next item
+      tl.fromTo(nextItem, 
+        { opacity: 0.7, scale: 0.95, y: direction === 'next' ? 30 : -30 },
+        { 
+          opacity: 1, 
+          scale: 1, 
+          y: 0,
+          duration: 0.6,
+          ease: "back.out(1.7)"
+        }, 0.2);
+      
+      // Animate stars with stagger
+      const stars = nextItem.querySelectorAll('.stars-container svg');
+      if (stars.length > 0) {
+        tl.fromTo(stars,
+          { scale: 0, rotation: -180 },
+          { 
+            scale: 1, 
+            rotation: 0,
+            duration: 0.4,
+            ease: "back.out(1.7)",
+            stagger: 0.1
+          }, 0.4);
+      }
+    }
+    
+    return tl;
+  };
+  
+  const updateControls = () => {
+    // Update dots
     dots.forEach((dot, index) => {
+      if (!dot) return; // Safety check
+      
+      dot.classList.toggle('active', index === currentSlide);
       if (index === currentSlide) {
-        dot.classList.add('active');
-        dot.classList.remove('bg-gray-600');
+        gsap.to(dot, { 
+          width: '1.75rem', 
+          height: '0.375rem',
+          scale: 1.05, 
+          duration: 0.3, 
+          ease: "back.out(1.7)" 
+        });
+        dot.classList.remove('bg-gray-600/60');
         dot.classList.add('bg-green-500');
       } else {
-        dot.classList.remove('active');
+        gsap.to(dot, { 
+          width: '1rem', 
+          height: '0.375rem',
+          scale: 1, 
+          duration: 0.3, 
+          ease: "power2.out" 
+        });
         dot.classList.remove('bg-green-500');
-        dot.classList.add('bg-gray-600');
+        dot.classList.add('bg-gray-600/60');
+      }
+    });
+    
+    
+    // Update navigation buttons
+    if (prevBtn) prevBtn.disabled = false;
+    if (nextBtn) nextBtn.disabled = false;
+    
+    // Add button animations with enhanced effects
+    const navButtons = [prevBtn, nextBtn].filter(Boolean);
+    if (navButtons.length > 0) {
+      gsap.to(navButtons, {
+        scale: 1,
+        duration: 0.3,
+        ease: "back.out(1.7)"
+      });
+      
+      // Add subtle pulse effect to active buttons
+      gsap.to(navButtons, {
+        boxShadow: "0 4px 20px rgba(34, 197, 94, 0.15)",
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    }
+  };
+  
+  const nextSlide = () => {
+    if (isAnimating) return;
+    stopAutoplay();
+    
+    // Add click animation to next button
+    if (nextBtn) {
+      gsap.to(nextBtn, {
+        scale: 0.95,
+        duration: 0.1,
+        ease: "power2.out",
+        yoyo: true,
+        repeat: 1
+      });
+    }
+    
+    const nextIndex = (currentSlide + 1) % totalSlides;
+    slideToIndex(nextIndex, 'next');
+  };
+  
+  const prevSlide = () => {
+    if (isAnimating) return;
+    stopAutoplay();
+    
+    // Add click animation to prev button
+    if (prevBtn) {
+      gsap.to(prevBtn, {
+        scale: 0.95,
+        duration: 0.1,
+        ease: "power2.out",
+        yoyo: true,
+        repeat: 1
+      });
+    }
+    
+    const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+    slideToIndex(prevIndex, 'prev');
+  };
+  
+  const startAutoplay = () => {
+    if (isPaused) return;
+    stopAutoplay();
+    autoplayTimer = setTimeout(() => {
+      nextSlide();
+    }, 6000); // 6 seconds
+  };
+  
+  const stopAutoplay = () => {
+    if (autoplayTimer) {
+      clearTimeout(autoplayTimer);
+      autoplayTimer = null;
+    }
+  };
+  
+  const pauseAutoplay = () => {
+    isPaused = true;
+    stopAutoplay();
+    slider.classList.add('paused');
+  };
+  
+  const resumeAutoplay = () => {
+    isPaused = false;
+    slider.classList.remove('paused');
+    startAutoplay();
+  };
+  
+  // Event listeners with cleanup tracking
+  const cleanupFunctions = [];
+  
+  // Navigation buttons
+  cleanupFunctions.push(
+    DOM.on(nextBtn, 'click', nextSlide),
+    DOM.on(prevBtn, 'click', prevSlide)
+  );
+  
+  // Dot navigation
+  dots.forEach((dot, index) => {
+    cleanupFunctions.push(
+      DOM.on(dot, 'click', () => {
+        if (isAnimating) return;
+        stopAutoplay();
+        slideToIndex(index);
+      })
+    );
+  });
+  
+  // Pause on hover
+  cleanupFunctions.push(
+    DOM.on(slider, 'mouseenter', pauseAutoplay),
+    DOM.on(slider, 'mouseleave', resumeAutoplay)
+  );
+  
+  // Keyboard navigation
+  cleanupFunctions.push(
+    DOM.on(document, 'keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === ' ') {
+        e.preventDefault();
+        isPaused ? resumeAutoplay() : pauseAutoplay();
+      }
+    })
+  );
+  
+  // Initialize with safety checks
+  if (track) {
+    gsap.set(track, { x: '0%' });
+  }
+  
+  if (testimonialItems.length > 0) {
+    gsap.set(testimonialItems, { opacity: 1, scale: 1, y: 0 });
+    
+    if (testimonialItems[0]) {
+      gsap.set(testimonialItems[0], { opacity: 1, scale: 1 });
+    }
+    
+    // Set initial states for non-active items
+    testimonialItems.forEach((item, index) => {
+      if (item && index !== 0) {
+        gsap.set(item, { opacity: 0.7, scale: 0.95 });
       }
     });
   }
   
-  function nextSlide() {
-    currentSlide = (currentSlide + 1) % totalSlides;
-    updateSlider();
-  }
+  updateControls();
+  startAutoplay();
   
-  function prevSlide() {
-    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-    updateSlider();
-  }
-  
-  // Event listeners
-  nextBtn?.addEventListener('click', nextSlide);
-  prevBtn?.addEventListener('click', prevSlide);
-  
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      currentSlide = index;
-      updateSlider();
-    });
-  });
-  
-  // Auto-slide cada 5 segundos
-  setInterval(nextSlide, 5000);
-  
-  // Inicializar
-  updateSlider();
+  return () => {
+    stopAutoplay();
+    cleanupFunctions.forEach(cleanup => cleanup && cleanup());
+  };
 }
 
 // ==========================================
@@ -422,97 +743,466 @@ function initCursorGlow() {
 }
 
 // ==========================================
-// GSAP SCROLL ANIMATIONS
+// GSAP ANIMATION SYSTEM - MODULAR & REUSABLE
 // ==========================================
-function initializeGSAPAnimations() {
-  gsap.defaults({ ease: "power2.out", duration: 1 });
 
-  // Fade Up
-  gsap.utils.toArray('.fade-up').forEach((element, index) => {
-    gsap.fromTo(element, 
-      { y: 60, opacity: 0 },
-      {
-        y: 0, opacity: 1, duration: 0.8, delay: index * 0.1,
-        scrollTrigger: { trigger: element, start: "top 85%", toggleActions: "play none none reverse" }
+// Animation presets for reusability
+const ANIMATION_PRESETS = {
+  fadeUp: { y: 60, opacity: 0 },
+  fadeDown: { y: -60, opacity: 0 },
+  fadeLeft: { x: -60, opacity: 0 },
+  fadeRight: { x: 60, opacity: 0 },
+  scaleUp: { scale: 0.8, opacity: 0 },
+  slideUp: { y: 30, opacity: 0 },
+  bounce: { y: 40, opacity: 0, scale: 0.9 },
+  elastic: { scale: 0, opacity: 0 },
+  badge: { y: 30, opacity: 0, scale: 0.8 },
+  icon: { rotation: -15, scale: 0 }
+};
+
+const EASING_PRESETS = {
+  smooth: "power2.out",
+  dramatic: "power3.out", 
+  bounce: "back.out(1.7)",
+  elastic: "elastic.out(1, 0.3)",
+  natural: "sine.inOut"
+};
+
+// Utility function to create animations
+function createAnimation(selector, preset, options = {}) {
+  const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : [selector];
+  if (!elements.length) return null;
+
+  const defaultOptions = {
+    duration: 0.8,
+    ease: EASING_PRESETS.smooth,
+    delay: 0,
+    stagger: 0,
+    ...options
+  };
+
+  const fromProps = ANIMATION_PRESETS[preset] || preset;
+  const toProps = {
+    x: 0, y: 0, scale: 1, opacity: 1, rotation: 0,
+    duration: defaultOptions.duration,
+    ease: defaultOptions.ease,
+    delay: defaultOptions.delay,
+    stagger: defaultOptions.stagger > 0 ? defaultOptions.stagger : undefined,
+    ...defaultOptions.to
+  };
+
+  return gsap.fromTo(elements, fromProps, toProps);
+}
+
+// Hero Timeline - Coordinated sequence without reverse
+function createHeroTimeline() {
+  const tl = gsap.timeline({ defaults: { ease: EASING_PRESETS.smooth } });
+
+  // Set initial states to prevent FOUC and reverse animations
+  gsap.set([
+    '.hero-title', '.hero-title + p', '.hero-cta', '.hero-social a', 
+    '.hero-stat', '.hero-visual', '.tech-title', '.tech-carousel-container', 
+    '.tech-carousel', '.tech-item', '.animate-bounce', '.blur-2xl', '.blur-3xl'
+  ], { opacity: 0 });
+
+  // Hero sequence
+  tl.fromTo('.hero-title', 
+    ANIMATION_PRESETS.bounce, 
+    { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: EASING_PRESETS.dramatic }, 0.3)
+    
+  .fromTo('.hero-visual', 
+    ANIMATION_PRESETS.fadeRight, 
+    { opacity: 1, x: 0, scale: 1, duration: 1.0 }, 0.6)
+    
+  .fromTo('.hero-title + p', 
+    ANIMATION_PRESETS.slideUp, 
+    { opacity: 1, y: 0, duration: 0.8 }, 0.8)
+    
+  .fromTo('.hero-cta', 
+    ANIMATION_PRESETS.bounce, 
+    { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: EASING_PRESETS.bounce }, 1.2)
+    
+  .fromTo('.hero-social a', 
+    ANIMATION_PRESETS.elastic, 
+    { opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, ease: EASING_PRESETS.bounce }, 1.4)
+    
+  .fromTo('.hero-stat', 
+    ANIMATION_PRESETS.bounce, 
+    { 
+      opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.15, ease: EASING_PRESETS.bounce,
+      onComplete: () => initGSAPCounters()
+    }, 1.6)
+    
+  .fromTo('.tech-title', 
+    ANIMATION_PRESETS.badge, 
+    { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: EASING_PRESETS.bounce }, 1.8)
+    
+  .fromTo('.tech-title svg', 
+    ANIMATION_PRESETS.icon, 
+    { rotation: 0, scale: 1, duration: 0.6, ease: EASING_PRESETS.elastic }, 1.9)
+    
+  .fromTo('.tech-carousel-container', 
+    { opacity: 0, y: 30, scale: 0.95 }, 
+    { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power2.out" }, 1.95)
+    
+  .fromTo('.tech-carousel', 
+    ANIMATION_PRESETS.slideUp, 
+    { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, 2.0)
+    
+  .fromTo('.tech-item', 
+    { scale: 0, opacity: 0, y: 20, rotation: -5 }, 
+    { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0,
+      rotation: 0, 
+      duration: 0.8, 
+      stagger: 0.08, 
+      ease: "back.out(1.7)",
+      delay: 0.3
+    }, 2.2);
+
+  return tl;
+}
+
+// Background animations - separate timeline
+function createBackgroundAnimations() {
+  const tl = gsap.timeline();
+
+  // Set initial state
+  gsap.set(['.blur-2xl', '.blur-3xl', '.animate-bounce'], { opacity: 0 });
+
+  // Background gradients
+  tl.fromTo('.blur-2xl, .blur-3xl', 
+    { scale: 0, opacity: 0 }, 
+    { 
+      scale: 1, opacity: 1, duration: 1.5, stagger: 0.3, ease: EASING_PRESETS.smooth,
+      onComplete: function() {
+        // Continuous floating after initial animation
+        gsap.to('.blur-2xl, .blur-3xl', {
+          x: "random(-10, 10)",
+          y: "random(-15, 15)",
+          duration: "random(8, 12)",
+          ease: EASING_PRESETS.natural,
+          yoyo: true,
+          repeat: -1,
+          stagger: 0.5
+        });
       }
-    );
+    }, 0)
+    
+  // Floating particles
+  .fromTo('.animate-bounce', 
+    ANIMATION_PRESETS.elastic, 
+    { 
+      opacity: 1, scale: 1, duration: 0.8, stagger: 0.2, ease: EASING_PRESETS.elastic,
+      onComplete: function() {
+        // Continuous floating
+        gsap.to('.animate-bounce', {
+          y: -8,
+          duration: 2,
+          ease: EASING_PRESETS.natural,
+          yoyo: true,
+          repeat: -1,
+          stagger: 0.3
+        });
+      }
+    }, 2.5);
+
+  return tl;
+}
+
+// Scroll-triggered animations - reusable system
+function createScrollAnimations() {
+  const animationMap = {
+    '.fade-up': 'fadeUp',
+    '.fade-left': 'fadeLeft', 
+    '.fade-right': 'fadeRight',
+    '.scale-up': 'scaleUp'
+  };
+
+  Object.entries(animationMap).forEach(([selector, preset]) => {
+    gsap.utils.toArray(selector).forEach((element, index) => {
+      gsap.fromTo(element, 
+        ANIMATION_PRESETS[preset],
+        {
+          y: 0, x: 0, scale: 1, opacity: 1, 
+          duration: 0.8, 
+          delay: index * 0.1,
+          scrollTrigger: { 
+            trigger: element, 
+            start: "top 85%", 
+            toggleActions: "play none none none" // Removed reverse to prevent backwards animation
+          }
+        }
+      );
+    });
   });
 
-  // Fade Left
-  gsap.utils.toArray('.fade-left').forEach((element, index) => {
-    gsap.fromTo(element,
-      { x: -60, opacity: 0 },
-      {
-        x: 0, opacity: 1, duration: 0.8, delay: index * 0.1,
-        scrollTrigger: { trigger: element, start: "top 85%", toggleActions: "play none none reverse" }
-      }
-    );
-  });
-
-  // Fade Right
-  gsap.utils.toArray('.fade-right').forEach((element, index) => {
-    gsap.fromTo(element,
-      { x: 60, opacity: 0 },
-      {
-        x: 0, opacity: 1, duration: 0.8, delay: index * 0.1,
-        scrollTrigger: { trigger: element, start: "top 85%", toggleActions: "play none none reverse" }
-      }
-    );
-  });
-
-  // Scale Up
-  gsap.utils.toArray('.scale-up').forEach((element, index) => {
-    gsap.fromTo(element,
-      { scale: 0.8, opacity: 0 },
-      {
-        scale: 1, opacity: 1, duration: 0.8, delay: index * 0.1,
-        scrollTrigger: { trigger: element, start: "top 85%", toggleActions: "play none none reverse" }
-      }
-    );
-  });
-
-  // Stagger Animations
+  // Stagger animations
   gsap.utils.toArray('.stagger-children').forEach((container) => {
     const items = container.querySelectorAll('.stagger-item');
     gsap.fromTo(items,
-      { y: 50, opacity: 0 },
+      ANIMATION_PRESETS.fadeUp,
       {
         y: 0, opacity: 1, duration: 0.6, stagger: 0.15,
-        scrollTrigger: { trigger: container, start: "top 85%", toggleActions: "play none none reverse" }
+        scrollTrigger: { 
+          trigger: container, 
+          start: "top 85%", 
+          toggleActions: "play none none none" 
+        }
       }
     );
   });
 
-  // Hero Title
-  const heroTitle = document.querySelector('.hero-title');
-  if (heroTitle) {
-    gsap.fromTo(heroTitle, { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.3 });
-  }
-
-  // Hero Stats
-  const heroStats = document.querySelectorAll('.hero-stat');
-  if (heroStats.length > 0) {
-    gsap.fromTo(heroStats, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, delay: 1, ease: "back.out(1.7)" });
-  }
-
-  // Parallax
+  // Parallax - smooth and performant
   gsap.utils.toArray('.parallax-bg').forEach((element) => {
     gsap.to(element, {
-      yPercent: -50, ease: "none",
-      scrollTrigger: { trigger: element, start: "top bottom", end: "bottom top", scrub: true }
+      yPercent: -30, // Reduced movement
+      ease: "none",
+      scrollTrigger: { 
+        trigger: element, 
+        start: "top bottom", 
+        end: "bottom top", 
+        scrub: 1 // Smoother scrubbing
+      }
     });
   });
+}
+
+// Tech Carousel Draggable functionality
+function initTechCarouselDraggable(retryCount = 0) {
+  const maxRetries = 5;
+  
+  const carousel = document.querySelector('.tech-carousel');
+  const container = document.querySelector('.tech-carousel-container');
+  
+  if (!carousel || !container) {
+    if (retryCount < maxRetries) {
+      setTimeout(() => initTechCarouselDraggable(retryCount + 1), 1000);
+    }
+    return;
+  }
+  
+  if (typeof Draggable === 'undefined') {
+    if (retryCount < maxRetries) {
+      setTimeout(() => initTechCarouselDraggable(retryCount + 1), 1000);
+    }
+    return;
+  }
+
+  try {
+    // Get dimensions
+    const carouselWidth = carousel.scrollWidth;
+    const containerWidth = container.offsetWidth;
+    const maxDrag = Math.min(0, -(carouselWidth - containerWidth));
+
+    let scrollTween;
+    
+    // Wait for GSAP animations to complete, then smoothly transition to draggable
+    gsap.delayedCall(3, () => {
+      // Capture current position before stopping CSS animation
+      const currentTransform = getComputedStyle(carousel).transform;
+      let currentX = 0;
+      
+      if (currentTransform && currentTransform !== 'none') {
+        const matrix = currentTransform.match(/matrix.*\((.+)\)/);
+        if (matrix) {
+          const values = matrix[1].split(', ');
+          currentX = parseFloat(values[4]) || 0;
+        }
+      }
+      
+      // Stop CSS animation and set current position
+      carousel.style.animation = 'none';
+      gsap.set(carousel, { x: currentX });
+      
+      // Start GSAP infinite scroll from current position
+      scrollTween = gsap.to(carousel, {
+        x: maxDrag,
+        duration: 30 * (1 - Math.abs(currentX / maxDrag)), // Adjust duration based on current position
+        ease: "none",
+        repeat: -1,
+        onComplete: function() {
+          // Reset to beginning and continue infinite loop
+          gsap.set(carousel, { x: 0 });
+          scrollTween = gsap.to(carousel, {
+            x: maxDrag,
+            duration: 30,
+            ease: "none",
+            repeat: -1
+          });
+        }
+      });
+    });
+    
+    // Create draggable instance
+    const draggableInstance = Draggable.create(carousel, {
+      type: "x",
+      bounds: { minX: maxDrag, maxX: 0 },
+      inertia: true,
+      
+      onDragStart: function() {
+        carousel.style.cursor = "grabbing";
+        document.body.style.userSelect = 'none';
+        
+        // Kill the auto-scroll tween
+        if (scrollTween) {
+          scrollTween.kill();
+        }
+      },
+      
+      onDrag: function() {
+        // Dragging functionality handled by GSAP
+      },
+      
+      onDragEnd: function() {
+        carousel.style.cursor = "grab";
+        document.body.style.userSelect = '';
+        
+        // Resume auto-scroll from current position after 2 seconds
+        setTimeout(() => {
+          const currentX = gsap.getProperty(carousel, "x");
+          const remainingDistance = maxDrag - currentX;
+          const remainingDuration = 30 * (Math.abs(remainingDistance) / Math.abs(maxDrag));
+          
+          scrollTween = gsap.to(carousel, {
+            x: maxDrag,
+            duration: remainingDuration,
+            ease: "none",
+            onComplete: function() {
+              // Seamless loop back to start
+              gsap.set(carousel, { x: 0 });
+              scrollTween = gsap.to(carousel, {
+                x: maxDrag,
+                duration: 30,
+                ease: "none",
+                repeat: -1
+              });
+            }
+          });
+        }, 2000);
+      }
+    });
+
+    // Set initial styles
+    carousel.style.cursor = "grab";
+    carousel.style.willChange = "transform";
+    
+    return draggableInstance[0];
+    
+  } catch (error) {
+    return null;
+  }
+}
+
+// Main initialization function
+function initializeGSAPAnimations() {
+  gsap.defaults({ ease: EASING_PRESETS.smooth, duration: 0.8 });
+
+  // Create coordinated timelines
+  const heroTL = createHeroTimeline();
+  const bgTL = createBackgroundAnimations();
+  
+  // Initialize scroll animations
+  createScrollAnimations();
+  
+  // Initialize tech carousel draggable after a delay to ensure elements are rendered
+  setTimeout(() => {
+    initTechCarouselDraggable();
+  }, 2500);
+
+  // Return timelines for potential control
+  return { heroTL, bgTL };
+}
+
+// ==========================================
+// GSAP COUNTER ANIMATION
+// ==========================================
+function initGSAPCounters() {
+  const counters = document.querySelectorAll('.counter');
+  
+  counters.forEach((counter) => {
+    const targetAttr = counter.getAttribute('data-target');
+    const target = parseInt(targetAttr || '0');
+    const suffix = counter.getAttribute('data-suffix');
+    
+    // Create a counter object for GSAP to animate
+    const counterObj = { value: 0 };
+    
+    gsap.to(counterObj, {
+      value: target,
+      duration: 2,
+      ease: "power2.out",
+      onUpdate: function() {
+        const currentValue = Math.floor(counterObj.value);
+        
+        // Format the number based on suffix
+        if (suffix === 'K') {
+          const value = (counterObj.value / 1000).toFixed(1);
+          counter.innerHTML = `${value}<span class="text-green-400 group-hover:text-green-300">K</span>`;
+        } else if (counter.innerHTML.includes('+')) {
+          counter.innerHTML = `${currentValue}<span class="text-green-400 group-hover:text-green-300">+</span>`;
+        } else {
+          counter.textContent = currentValue.toString();
+        }
+      }
+    });
+  });
+}
+
+
+// ==========================================
+// GSAP INITIALIZATION HELPER
+// ==========================================
+function initGSAPWhenReady(retryCount = 0) {
+  const maxRetries = 50;
+  
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof Draggable !== 'undefined') {
+    try {
+      gsap.registerPlugin(ScrollTrigger, Draggable);
+      initializeGSAPAnimations();
+    } catch (error) {
+      // Fallback: try to initialize draggable only if Draggable is available
+      if (typeof Draggable !== 'undefined') {
+        setTimeout(() => {
+          initTechCarouselDraggable();
+        }, 2500);
+      }
+    }
+  } else if (retryCount < maxRetries) {
+    // Retry after a short delay if GSAP is not ready
+    setTimeout(() => initGSAPWhenReady(retryCount + 1), 100);
+  } else {
+    // Last attempt: try to initialize draggable only if available
+    if (typeof Draggable !== 'undefined') {
+      setTimeout(() => {
+        initTechCarouselDraggable();
+      }, 3000);
+    }
+  }
 }
 
 // ==========================================
 // INITIALIZATION
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize basic functionality first
   initCursorGlow();
   initHeader();
-  initHeroCounters();
-  initPortfolio();
-  initSkills();
-  initTestimonials();
+  
+  // Initialize other components
+  initGSAPPortfolio();
+  initGSAPTestimonials();
   initContactForm();
+  
+  // Initialize GSAP animations with retry mechanism
+  initGSAPWhenReady();
+  
+  // Also try to initialize draggable independently after a delay
+  setTimeout(() => {
+    if (typeof Draggable !== 'undefined') {
+      initTechCarouselDraggable();
+    }
+  }, 4000);
 });
