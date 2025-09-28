@@ -63,6 +63,14 @@ import GSAPLoader from '../components/GSAPLoader.astro';
       setTimeout(function() {
         document.body.classList.add('loaded');
       }, 2000);
+      
+      // Fallback: Show elements if GSAP doesn't load within 3 seconds
+      setTimeout(function() {
+        if (!document.body.classList.contains('gsap-ready')) {
+          console.warn('⚠️ GSAP not loaded, showing elements without animations');
+          document.body.classList.add('gsap-ready');
+        }
+      }, 3000);
     </script>
     
     <!-- Main JavaScript - Deferred -->
@@ -93,6 +101,52 @@ import GSAPLoader from '../components/GSAPLoader.astro';
     background-repeat: repeat-y;
     background-size: auto;
     transition: background-color .3s, color .3s;
+  }
+
+  /* Hide animated elements initially to prevent FOUC and jumps */
+  .hero-title,
+  .hero-title + p,
+  .hero-cta,
+  .hero-social a,
+  .hero-stat,
+  .hero-visual,
+  .tech-title,
+  .tech-carousel-container,
+  .tech-carousel,
+  .tech-item,
+  .animate-bounce,
+  .blur-2xl,
+  .blur-3xl,
+  .fade-up,
+  .fade-left,
+  .fade-right,
+  .scale-up,
+  .stagger-item {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Show elements when GSAP is ready */
+  body.gsap-ready .hero-title,
+  body.gsap-ready .hero-title + p,
+  body.gsap-ready .hero-cta,
+  body.gsap-ready .hero-social a,
+  body.gsap-ready .hero-stat,
+  body.gsap-ready .hero-visual,
+  body.gsap-ready .tech-title,
+  body.gsap-ready .tech-carousel-container,
+  body.gsap-ready .tech-carousel,
+  body.gsap-ready .tech-item,
+  body.gsap-ready .animate-bounce,
+  body.gsap-ready .blur-2xl,
+  body.gsap-ready .blur-3xl,
+  body.gsap-ready .fade-up,
+  body.gsap-ready .fade-left,
+  body.gsap-ready .fade-right,
+  body.gsap-ready .scale-up,
+  body.gsap-ready .stagger-item {
+    opacity: 1;
+    visibility: visible;
   }
 
   /* Cursor glow effect */
