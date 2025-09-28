@@ -1,0 +1,424 @@
+---
+// Hero.astro
+---
+
+<section class="relative pt-12">
+  <!-- Elementos decorativos animados -->
+  <div class="absolute inset-0 -z-10 overflow-hidden">
+    <!-- Gradientes flotantes -->
+    <div class="absolute top-1/4 left-1/4 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-full blur-2xl sm:blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 bg-gradient-to-r from-emerald-500/10 to-green-600/10 rounded-full blur-2xl sm:blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-gradient-to-r from-green-400/5 to-emerald-400/5 rounded-full blur-xl sm:blur-2xl animate-pulse" style="animation-delay: 4s;"></div>
+    
+    <!-- Partículas flotantes -->
+    <div class="absolute top-16 sm:top-20 left-6 sm:left-10 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500/30 rounded-full animate-bounce" style="animation-delay: 1s;"></div>
+    <div class="absolute top-32 sm:top-40 right-12 sm:right-20 w-2 h-2 sm:w-3 sm:h-3 bg-emerald-400/20 rounded-full animate-bounce" style="animation-delay: 3s;"></div>
+    <div class="absolute bottom-16 sm:bottom-20 right-6 sm:right-10 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-green-500/25 rounded-full animate-bounce" style="animation-delay: 2s;"></div>
+  </div>
+
+  <!-- Contenido principal del Hero -->
+  <div class="w-full relative z-10 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24">
+    <div class="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 sm:gap-10 md:gap-12 lg:gap-16 items-center">
+      
+      <!-- Columna Izquierda - Contenido -->
+      <div class="space-y-6 sm:space-y-8 lg:space-y-10 text-center lg:text-left px-4 sm:px-0">
+
+        <!-- Título principal -->
+        <div class="space-y-4 sm:space-y-6 lg:space-y-8">
+          <h1 class="hero-title text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] sm:leading-tight">
+            <span class="block bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+              Desarrollo
+            </span>
+            <span class="block">Web Profesional.</span>
+          </h1>
+          
+          <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-sm sm:max-w-md lg:max-w-lg mx-auto lg:mx-0 leading-relaxed">
+            Desarrollador Full Stack especializado en crear soluciones web modernas y funcionales.
+          </p>
+        </div>
+
+        <!-- Botón de acción y redes sociales -->
+        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-6">
+          <a 
+            href="/proyectos" 
+            class="hero-cta group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(34,197,94,0.5)] text-sm sm:text-base w-full sm:w-auto max-w-xs sm:max-w-none"
+          >
+            <span>Ver mi trabajo</span>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"/>
+              <path d="M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+
+          <!-- Iconos de redes sociales -->
+          <div class="hero-social flex items-center justify-center gap-2 sm:gap-3">
+            <!-- X (Twitter) -->
+            <a 
+              href="https://x.com/turindev" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-sm text-gray-400 hover:text-white hover:bg-gradient-to-br hover:from-green-500/20 hover:to-emerald-500/20 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-green-500/30"
+              title="Sígueme en X"
+            >
+              <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+
+            <!-- GitHub -->
+            <a 
+              href="https://github.com/turindev" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-sm text-gray-400 hover:text-white hover:bg-gradient-to-br hover:from-green-500/20 hover:to-emerald-500/20 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-green-500/30"
+              title="Ver mi código en GitHub"
+            >
+              <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </a>
+
+            <!-- LinkedIn -->
+            <a 
+              href="https://linkedin.com/in/turindev" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-sm text-gray-400 hover:text-white hover:bg-gradient-to-br hover:from-green-500/20 hover:to-emerald-500/20 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-green-500/30"
+              title="Conecta conmigo en LinkedIn"
+            >
+              <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+
+            <!-- YouTube -->
+            <a 
+              href="https://youtube.com/@turindev" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-sm text-gray-400 hover:text-white hover:bg-gradient-to-br hover:from-green-500/20 hover:to-emerald-500/20 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-green-500/30"
+              title="Suscríbete a mi canal de YouTube"
+            >
+              <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna Derecha - Visual/Imagen -->
+      <div class="hero-visual relative flex items-center justify-center lg:justify-end mt-8 lg:mt-0">
+        
+        <!-- Contenedor principal con efectos -->
+        <div class="relative w-full max-w-sm sm:max-w-md mx-auto lg:mx-0">
+          
+          <!-- Círculo de fondo con gradiente -->
+          <div class="absolute inset-0 bg-gradient-to-br from-green-500/15 via-emerald-500/8 to-green-600/15 rounded-full blur-3xl"></div>
+          
+          <!-- Elemento visual principal -->
+          <div class="relative bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl p-6 shadow-2xl hover:shadow-[0_0_40px_rgba(34,197,94,0.2)] transition-all duration-500 hover:scale-[1.02]">
+            
+            <!-- Código simulado -->
+            <div class="space-y-4">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="flex gap-2">
+                  <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <span class="text-gray-400 text-sm font-mono">turin.dev</span>
+              </div>
+              
+              <div class="space-y-3 font-mono text-sm">
+                <div class="flex items-center gap-2">
+                  <span class="text-green-400">const</span>
+                  <span class="text-blue-300">developer</span>
+                  <span class="text-gray-300">=</span>
+                  <span class="text-green-300">{</span>
+                </div>
+                <div class="pl-4 space-y-2">
+                  <div class="flex items-center gap-2">
+                    <span class="text-blue-300">name:</span>
+                    <span class="text-orange-300">'Turin Dev'</span><span class="text-gray-300">,</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-blue-300">skills:</span>
+                    <span class="text-gray-300">[</span>
+                  </div>
+                  <div class="pl-4 space-y-1">
+                    <div class="text-orange-300">'React'<span class="text-gray-300">,</span></div>
+                    <div class="text-orange-300">'Node.js'<span class="text-gray-300">,</span></div>
+                    <div class="text-orange-300">'TypeScript'<span class="text-gray-300">,</span></div>
+                    <div class="text-orange-300">'Astro'</div>
+                  </div>
+                  <div class="text-gray-300">],</div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-blue-300">passion:</span>
+                    <span class="text-orange-300">'Creating amazing web experiences'</span>
+                  </div>
+                </div>
+                <div class="text-green-300">}</div>
+              </div>
+            </div>
+            
+            <!-- Elementos decorativos flotantes -->
+            <div class="absolute -top-3 -right-3 w-6 h-6 bg-green-500/25 rounded-full animate-bounce" style="animation-delay: 1s;"></div>
+            <div class="absolute -bottom-3 -left-3 w-4 h-4 bg-emerald-400/25 rounded-full animate-bounce" style="animation-delay: 2s;"></div>
+          </div>
+          
+          <!-- Elementos decorativos adicionales -->
+          <div class="absolute bottom-1/4 -right-6 w-8 h-8 border border-green-400/15 rounded-lg rotate-45 animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mt-8 sm:mt-10 px-4 sm:px-0">
+      <div
+        class="hero-stat bg-gray-900/40 backdrop-blur-sm border border-gray-700/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-500 hover:bg-gradient-to-br hover:from-gray-800/60 hover:to-gray-900/80 hover:border-green-400/50 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 flex flex-col sm:flex-row items-center sm:gap-4 group text-center sm:text-left">
+        <div class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white group-hover:text-green-100 transition-colors duration-500 counter" data-target="14">0</div>
+        <div class="text-gray-400 text-xs sm:text-sm lg:text-base font-medium leading-tight group-hover:text-gray-300 transition-colors duration-500 mt-1 sm:mt-0">
+          <div>Años de</div>
+          <div>Experiencia</div>
+        </div>
+      </div>
+      <div
+        class="hero-stat bg-gray-900/40 backdrop-blur-sm border border-gray-700/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-500 hover:bg-gradient-to-br hover:from-gray-800/60 hover:to-gray-900/80 hover:border-green-400/50 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 flex flex-col sm:flex-row items-center sm:gap-4 group text-center sm:text-left">
+        <div class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white group-hover:text-green-100 transition-colors duration-500 counter" data-target="50">0<span class="text-green-400 group-hover:text-green-300">+</span></div>
+        <div class="text-gray-400 text-xs sm:text-sm lg:text-base font-medium leading-tight group-hover:text-gray-300 transition-colors duration-500 mt-1 sm:mt-0">
+          <div>Proyectos</div>
+          <div>Completados</div>
+        </div>
+      </div>
+      <div
+        class="hero-stat bg-gray-900/40 backdrop-blur-sm border border-gray-700/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-500 hover:bg-gradient-to-br hover:from-gray-800/60 hover:to-gray-900/80 hover:border-green-400/50 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 flex flex-col sm:flex-row items-center sm:gap-4 group text-center sm:text-left">
+        <div class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white group-hover:text-green-100 transition-colors duration-500 counter" data-target="1500" data-suffix="K">0<span class="text-green-400 group-hover:text-green-300">K</span></div>
+        <div class="text-gray-400 text-xs sm:text-sm lg:text-base font-medium leading-tight group-hover:text-gray-300 transition-colors duration-500 mt-1 sm:mt-0">
+          <div>Clientes</div>
+          <div>Satisfechos</div>
+        </div>
+      </div>
+      <div
+        class="hero-stat bg-gray-900/40 backdrop-blur-sm border border-gray-700/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-500 hover:bg-gradient-to-br hover:from-gray-800/60 hover:to-gray-900/80 hover:border-green-400/50 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 flex flex-col sm:flex-row items-center sm:gap-4 group text-center sm:text-left">
+        <div class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white group-hover:text-green-100 transition-colors duration-500 counter" data-target="14">0</div>
+        <div class="text-gray-400 text-xs sm:text-sm lg:text-base font-medium leading-tight group-hover:text-gray-300 transition-colors duration-500 mt-1 sm:mt-0">
+          <div>Premios</div>
+          <div>Ganados</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech Stack Carousel - Integrado en Hero -->
+    <div class="fade-up px-4 sm:px-0 w-full py-4">
+      <div class="text-center mb-6 sm:mb-8 mt-8">
+        <div class="tech-title inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm border border-green-500/20 rounded-full mb-4">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/>
+          </svg>
+          <span class="text-green-400 font-medium text-xs sm:text-sm">Tecnologías que domino</span>
+        </div>
+      </div>
+      
+      <div class="tech-carousel-container relative w-full py-4" style="overflow-x: hidden;">
+        <!-- Gradientes laterales -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-16 lg:w-20 bg-gradient-to-r from-slate-950 to-transparent z-10"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-8 sm:w-16 lg:w-20 bg-gradient-to-l from-slate-950 to-transparent z-10"></div>
+        
+        <!-- Carrusel -->
+        <div class="tech-carousel flex items-center gap-4 sm:gap-6 lg:gap-8 animate-scroll py-2">
+          <!-- Primera fila de tecnologías -->
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-orange-500/20 to-orange-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-orange-500/30 hover:border-orange-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-orange-500 font-bold text-sm sm:text-base lg:text-lg group-hover:text-orange-400">HTML</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-blue-500 font-bold text-sm sm:text-base lg:text-lg group-hover:text-blue-400">CSS</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-yellow-500/30 hover:border-yellow-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-yellow-500 font-bold text-sm group-hover:text-yellow-400">JS</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-cyan-500/30 hover:border-cyan-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-cyan-500 font-bold text-sm group-hover:text-cyan-400">React</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-green-500/30 hover:border-green-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-green-500 font-bold text-sm group-hover:text-green-400">Node</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-purple-500/30 hover:border-purple-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-purple-500 font-bold text-sm group-hover:text-purple-400">Astro</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-cyan-400/20 to-cyan-500/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-cyan-400/30 hover:border-cyan-300/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-cyan-400 font-bold text-xs sm:text-sm group-hover:text-cyan-300">Tailwind</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-600/20 to-blue-700/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-blue-600/30 hover:border-blue-500/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-blue-600 font-bold text-sm group-hover:text-blue-500">PHP</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-blue-500 font-bold text-xs sm:text-sm group-hover:text-blue-400">MySQL</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-green-600/20 to-green-700/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-green-600/30 hover:border-green-500/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-green-600 font-bold text-xs sm:text-sm group-hover:text-green-500">MongoDB</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-orange-500/20 to-orange-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-orange-500/30 hover:border-orange-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-orange-500 font-bold text-sm group-hover:text-orange-400">Git</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-600/20 to-blue-700/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-blue-600/30 hover:border-blue-500/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-blue-600 font-bold text-xs sm:text-sm group-hover:text-blue-500">WordPress</span>
+            </div>
+          </div>
+          
+          <!-- Duplicar para efecto infinito -->
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-orange-500/20 to-orange-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-orange-500/30 hover:border-orange-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-orange-500 font-bold text-sm sm:text-base lg:text-lg group-hover:text-orange-400">HTML</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-blue-500 font-bold text-sm sm:text-base lg:text-lg group-hover:text-blue-400">CSS</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-yellow-500/30 hover:border-yellow-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-yellow-500 font-bold text-sm group-hover:text-yellow-400">JS</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-cyan-500/30 hover:border-cyan-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-cyan-500 font-bold text-sm group-hover:text-cyan-400">React</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-green-500/30 hover:border-green-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-green-500 font-bold text-sm group-hover:text-green-400">Node</span>
+            </div>
+          </div>
+          
+          <div class="tech-item flex-shrink-0">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-purple-500/30 hover:border-purple-400/50 transition-all duration-300 hover:scale-110 group">
+              <span class="text-purple-500 font-bold text-sm group-hover:text-purple-400">Astro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* Tech Carousel Styles - Mantenemos solo estas animaciones CSS */
+  .tech-carousel-container {
+    mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+    -webkit-mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+    /* Allow hover effects to be visible */
+    padding: 8px 0;
+    overflow-y: visible !important;
+  }
+
+  .tech-carousel {
+    animation: scroll-left 30s linear infinite;
+    width: max-content;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: pan-x;
+    cursor: grab;
+  }
+
+  .tech-carousel:hover {
+    animation-play-state: paused;
+  }
+
+  .tech-carousel:active {
+    cursor: grabbing;
+  }
+
+  .tech-carousel.dragging {
+    animation-play-state: paused !important;
+  }
+
+  /* Ensure tech items have space for hover effects */
+  .tech-item {
+    /* Add padding to prevent clipping during scale transform */
+    padding: 4px;
+    margin: -4px;
+    min-width: 48px;
+  }
+
+  .tech-item > div {
+    /* Ensure smooth transitions */
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (min-width: 640px) {
+    .tech-item {
+      min-width: 56px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .tech-item {
+      min-width: 64px;
+    }
+  }
+</style>
+
+

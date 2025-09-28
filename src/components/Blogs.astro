@@ -1,0 +1,334 @@
+---
+// Blogs.astro
+---
+
+<section class="relative py-16 md:py-24 overflow-hidden">
+  <!-- Elementos decorativos de fondo -->
+  <div class="absolute inset-0 -z-10 overflow-hidden">
+    <div class="absolute top-1/4 right-1/4 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-gradient-to-r from-green-500/6 to-emerald-500/6 rounded-full blur-2xl sm:blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+    <div class="absolute bottom-1/3 left-1/3 w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 bg-gradient-to-r from-emerald-500/8 to-green-500/8 rounded-full blur-2xl sm:blur-3xl animate-pulse" style="animation-delay: 3s;"></div>
+  </div>
+
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header de la sección -->
+    <div class="text-center mb-20">
+      <div class="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm border border-green-500/20 rounded-full mb-8 fade-up">
+        <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10,9 9,9 8,9"/>
+        </svg>
+        <span class="text-green-400 font-semibold text-sm">Blog & Artículos</span>
+      </div>
+      
+      <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 fade-up">
+        Conocimiento <span class="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">Compartido</span>
+      </h2>
+      
+      <div class="flex items-center justify-center gap-6 fade-up">
+        <div class="flex items-center gap-2 text-gray-400">
+          <svg class="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+          <span class="text-sm font-medium">Contenido Premium</span>
+        </div>
+        <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+        <div class="flex items-center gap-2 text-gray-400">
+          <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          <span class="text-sm font-medium">Actualizado Semanalmente</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de artículos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto stagger-children">
+      
+      <!-- Artículo 1 -->
+      <article class="group relative bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl border border-gray-700/30 rounded-3xl overflow-hidden hover:border-green-400/50 hover:bg-gradient-to-br hover:from-green-900/10 hover:via-gray-900/95 hover:to-emerald-900/10 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_25px_50px_-12px_rgba(16,185,129,0.4)] stagger-item cursor-pointer">
+        <!-- Glow effect -->
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
+        
+        <!-- Imagen -->
+        <div class="relative aspect-[4/3] overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+            alt="Tendencias de desarrollo web 2024" 
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          
+          <!-- Categoría -->
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1.5 bg-green-500/90 backdrop-blur-sm text-white text-xs font-semibold rounded-full shadow-lg">
+              Desarrollo Web
+            </span>
+          </div>
+          
+          <!-- Tiempo de lectura -->
+          <div class="absolute top-4 right-4">
+            <div class="flex items-center gap-1 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-full">
+              <svg class="w-3 h-3 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+              <span class="text-xs text-gray-300 font-medium">5 min</span>
+            </div>
+          </div>
+          
+          <!-- Overlay content -->
+          <div class="absolute bottom-4 left-4 right-4">
+            <!-- Fecha -->
+            <div class="flex items-center gap-2 text-gray-300 text-xs mb-2">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span>15 Enero 2024</span>
+            </div>
+            
+            <!-- Título -->
+            <h3 class="text-lg font-bold text-white leading-tight group-hover:text-green-100 transition-colors">
+              Las 10 tendencias de desarrollo web que dominarán 2024
+            </h3>
+          </div>
+        </div>
+        
+        <!-- Footer compacto -->
+        <div class="relative p-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+              <span class="text-white text-xs font-bold">TD</span>
+            </div>
+            <div>
+              <span class="text-gray-300 text-sm font-medium">Turin Dev</span>
+              <div class="flex items-center gap-1 text-xs text-gray-500">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/>
+                </svg>
+                <span>124</span>
+              </div>
+            </div>
+          </div>
+          
+          <button class="group/btn flex items-center justify-center w-9 h-9 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 hover:border-green-400/40 rounded-xl transition-all duration-300 hover:scale-110">
+            <svg class="w-4 h-4 text-green-400 transition-transform group-hover/btn:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- Artículo 2 -->
+      <article class="group relative bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl border border-gray-700/30 rounded-3xl overflow-hidden hover:border-blue-400/50 hover:bg-gradient-to-br hover:from-blue-900/10 hover:via-gray-900/95 hover:to-cyan-900/10 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.4)] stagger-item cursor-pointer">
+        <!-- Glow effect -->
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
+        
+        <!-- Imagen -->
+        <div class="relative aspect-[4/3] overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+            alt="Optimización de rendimiento web" 
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          
+          <!-- Categoría -->
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1.5 bg-blue-500/90 backdrop-blur-sm text-white text-xs font-semibold rounded-full shadow-lg">
+              Performance
+            </span>
+          </div>
+          
+          <!-- Tiempo de lectura -->
+          <div class="absolute top-4 right-4">
+            <div class="flex items-center gap-1 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-full">
+              <svg class="w-3 h-3 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+              <span class="text-xs text-gray-300 font-medium">8 min</span>
+            </div>
+          </div>
+          
+          <!-- Overlay content -->
+          <div class="absolute bottom-4 left-4 right-4">
+            <!-- Fecha -->
+            <div class="flex items-center gap-2 text-gray-300 text-xs mb-2">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span>08 Enero 2024</span>
+            </div>
+            
+            <!-- Título -->
+            <h3 class="text-lg font-bold text-white leading-tight group-hover:text-blue-100 transition-colors">
+              Cómo optimizar el rendimiento de tu sitio web en 2024
+            </h3>
+          </div>
+        </div>
+        
+        <!-- Footer compacto -->
+        <div class="relative p-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+              <span class="text-white text-xs font-bold">TD</span>
+            </div>
+            <div>
+              <span class="text-gray-300 text-sm font-medium">Turin Dev</span>
+              <div class="flex items-center gap-1 text-xs text-gray-500">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/>
+                </svg>
+                <span>89</span>
+              </div>
+            </div>
+          </div>
+          
+          <button class="group/btn flex items-center justify-center w-9 h-9 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-400/40 rounded-xl transition-all duration-300 hover:scale-110">
+            <svg class="w-4 h-4 text-blue-400 transition-transform group-hover/btn:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- Artículo 3 -->
+      <article class="group relative bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl border border-gray-700/30 rounded-3xl overflow-hidden hover:border-purple-400/50 hover:bg-gradient-to-br hover:from-purple-900/10 hover:via-gray-900/95 hover:to-pink-900/10 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_25px_50px_-12px_rgba(147,51,234,0.4)] stagger-item cursor-pointer">
+        <!-- Glow effect -->
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
+        
+        <!-- Imagen -->
+        <div class="relative aspect-[4/3] overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+            alt="Diseño UX/UI moderno" 
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          
+          <!-- Categoría -->
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1.5 bg-purple-500/90 backdrop-blur-sm text-white text-xs font-semibold rounded-full shadow-lg">
+              UX/UI Design
+            </span>
+          </div>
+          
+          <!-- Tiempo de lectura -->
+          <div class="absolute top-4 right-4">
+            <div class="flex items-center gap-1 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-full">
+              <svg class="w-3 h-3 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+              <span class="text-xs text-gray-300 font-medium">6 min</span>
+            </div>
+          </div>
+          
+          <!-- Overlay content -->
+          <div class="absolute bottom-4 left-4 right-4">
+            <!-- Fecha -->
+            <div class="flex items-center gap-2 text-gray-300 text-xs mb-2">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span>02 Enero 2024</span>
+            </div>
+            
+            <!-- Título -->
+            <h3 class="text-lg font-bold text-white leading-tight group-hover:text-purple-100 transition-colors">
+              Principios de diseño UX que todo desarrollador debe conocer
+            </h3>
+          </div>
+        </div>
+        
+        <!-- Footer compacto -->
+        <div class="relative p-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+              <span class="text-white text-xs font-bold">TD</span>
+            </div>
+            <div>
+              <span class="text-gray-300 text-sm font-medium">Turin Dev</span>
+              <div class="flex items-center gap-1 text-xs text-gray-500">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/>
+                </svg>
+                <span>156</span>
+              </div>
+            </div>
+          </div>
+          
+          <button class="group/btn flex items-center justify-center w-9 h-9 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 hover:border-purple-400/40 rounded-xl transition-all duration-300 hover:scale-110">
+            <svg class="w-4 h-4 text-purple-400 transition-transform group-hover/btn:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- CTA para ver más artículos -->
+    <div class="text-center mt-20">
+      <div class="relative inline-block">
+        <!-- Glow effect -->
+        <div class="absolute -inset-1 bg-gradient-to-r from-green-500/30 to-emerald-500/30 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        
+        <button class="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 hover:from-green-500 hover:via-emerald-500 hover:to-green-600 text-white font-bold rounded-2xl transition-all duration-300 hover:shadow-[0_25px_50px_-12px_rgba(16,185,129,0.5)] hover:-translate-y-2 hover:scale-105 overflow-hidden">
+          <!-- Shine effect -->
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+          
+          <svg class="relative z-10 w-5 h-5 transition-transform group-hover:rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10,9 9,9 8,9"/>
+          </svg>
+          <span class="relative z-10">Explorar Blog Completo</span>
+          <svg class="relative z-10 w-5 h-5 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Stats del blog -->
+      <div class="flex items-center justify-center gap-8 mt-8 text-sm text-gray-400">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+          </svg>
+          <span>25+ Artículos</span>
+        </div>
+        <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/>
+          </svg>
+          <span>1.2K Lectores</span>
+        </div>
+        <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+          <span>Actualizado Semanalmente</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
