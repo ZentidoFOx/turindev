@@ -1,8 +1,9 @@
 ---
 // Testimonios.astro
+import Icon from "../Icon.astro";
 ---
 
-<section class="relative py-16 md:py-24 overflow-hidden">
+<section class="testimonios-section relative py-8 md:py-12 overflow-hidden">
   <!-- Elementos decorativos de fondo -->
   <div class="absolute inset-0 -z-10 overflow-hidden">
     <div class="absolute top-1/4 left-1/4 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-gradient-to-r from-green-500/6 to-emerald-500/6 rounded-full blur-2xl sm:blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
@@ -15,17 +16,17 @@
       <!-- Bloque izquierdo - Información -->
       <div class="space-y-8">
         <!-- Badge -->
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm border border-green-500/20 rounded-full fade-right">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm border border-green-500/20 rounded-full">
           <span class="text-green-400 font-medium text-sm">Testimonios</span>
         </div>
         
         <!-- Título principal -->
         <div class="space-y-6">
-          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight fade-right">
+          <h2 class="testimonios-title text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
             Las historias de mis <span class="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">clientes</span>
           </h2>
           
-          <p class="text-xl md:text-2xl text-gray-300 leading-relaxed fade-right">
+          <p class="text-xl md:text-2xl text-gray-300 leading-relaxed">
             Empoderar a las personas en un nuevo viaje digital con mis súper servicios
           </p>
         </div>
@@ -33,17 +34,15 @@
 
         <!-- CTA Button -->
         <div class="pt-4">
-          <button class="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold rounded-2xl transition-all duration-300 hover:shadow-[0_20px_40px_-12px_rgba(16,185,129,0.4)] hover:-translate-y-1 fade-right">
+          <button class="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold rounded-2xl transition-all duration-300 hover:shadow-[0_20px_40px_-12px_rgba(16,185,129,0.4)] hover:-translate-y-1">
             <span>Ver todos los testimonios</span>
-            <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
+            <Icon name="arrow-right" class="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </button>
         </div>
       </div>
 
       <!-- Bloque derecho - Slider de testimonios -->
-      <div class="relative fade-left">
+      <div class="relative">
         <!-- Decorative elements -->
         <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-green-400/10 to-emerald-400/10 rounded-full blur-xl"></div>
         <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-emerald-400/5 to-green-400/5 rounded-full blur-2xl"></div>
@@ -53,42 +52,30 @@
             
             <!-- Testimonio 1 -->
             <div class="testimonial-slide w-full flex-shrink-0 p-2 testimonial-item">
-              <div class="group bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl border border-gray-700/30 rounded-3xl p-6 sm:p-8 h-full transition-all duration-500 hover:border-green-400/40 hover:shadow-[0_25px_50px_-12px_rgba(34,197,94,0.25)] hover:scale-[1.02]">
+              <div class="testimonial-card group bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl border border-gray-700/30 rounded-3xl p-6 sm:p-8 h-full transition-all duration-500 hover:border-green-400/40 hover:shadow-[0_25px_50px_-12px_rgba(34,197,94,0.25)] hover:scale-[1.02]">
                 <!-- Quote icon -->
                 <div class="absolute top-4 right-6 opacity-10 group-hover:opacity-20 transition-opacity duration-300">
-                  <svg class="w-12 h-12 text-green-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
-                  </svg>
+                  <Icon name="quote" class="w-12 h-12 text-green-400" />
                 </div>
                 
                 <!-- Estrellas -->
-                <div class="flex gap-1 mb-6 stars-container">
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
+                <div class="testimonial-stars flex gap-1 mb-6 stars-container">
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
                 </div>
                 
                 <!-- Testimonio -->
-                <blockquote class="text-gray-300 text-lg leading-relaxed mb-8">
+                <blockquote class="testimonial-quote text-gray-300 text-lg leading-relaxed mb-8">
                   "Trabajar con este desarrollador ha sido una experiencia increíble. No solo entregó un sitio web excepcional, sino que también superó todas nuestras expectativas en términos de diseño y funcionalidad."
                 </blockquote>
                 
                 <!-- Cliente -->
                 <div class="flex items-center gap-4">
                   <div class="relative">
-                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <div class="testimonial-avatar w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <span class="text-white font-bold text-lg">MP</span>
                     </div>
                     <div class="absolute -inset-1 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -103,34 +90,22 @@
 
             <!-- Testimonio 2 -->
             <div class="testimonial-slide w-full flex-shrink-0 p-2 testimonial-item">
-              <div class="group bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl border border-gray-700/30 rounded-3xl p-6 sm:p-8 h-full transition-all duration-500 hover:border-blue-400/40 hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.25)] hover:scale-[1.02]">
+              <div class="testimonial-card group bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl border border-gray-700/30 rounded-3xl p-6 sm:p-8 h-full transition-all duration-500 hover:border-blue-400/40 hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.25)] hover:scale-[1.02]">
                 <!-- Quote icon -->
                 <div class="absolute top-4 right-6 opacity-10 group-hover:opacity-20 transition-opacity duration-300">
-                  <svg class="w-12 h-12 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
-                  </svg>
+                  <Icon name="quote" class="w-12 h-12 text-blue-400" />
                 </div>
                 <!-- Estrellas -->
-                <div class="flex gap-1 mb-6">
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
+                <div class="testimonial-stars flex gap-1 mb-6">
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
                 </div>
                 
                 <!-- Testimonio -->
-                <blockquote class="text-gray-300 text-lg leading-relaxed mb-8">
+                <blockquote class="testimonial-quote text-gray-300 text-lg leading-relaxed mb-8">
                   "La atención al detalle y la capacidad de transformar nuestras ideas en una realidad digital impresionante es lo que hace especial a este profesional. Altamente recomendado para cualquier proyecto web."
                 </blockquote>
                 
@@ -152,34 +127,22 @@
 
             <!-- Testimonio 3 -->
             <div class="testimonial-slide w-full flex-shrink-0 p-2 testimonial-item">
-              <div class="group bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl border border-gray-700/30 rounded-3xl p-6 sm:p-8 h-full transition-all duration-500 hover:border-emerald-400/40 hover:shadow-[0_25px_50px_-12px_rgba(16,185,129,0.25)] hover:scale-[1.02]">
+              <div class="testimonial-card group bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl border border-gray-700/30 rounded-3xl p-6 sm:p-8 h-full transition-all duration-500 hover:border-emerald-400/40 hover:shadow-[0_25px_50px_-12px_rgba(16,185,129,0.25)] hover:scale-[1.02]">
                 <!-- Quote icon -->
                 <div class="absolute top-4 right-6 opacity-10 group-hover:opacity-20 transition-opacity duration-300">
-                  <svg class="w-12 h-12 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
-                  </svg>
+                  <Icon name="quote" class="w-12 h-12 text-emerald-400" />
                 </div>
                 <!-- Estrellas -->
-                <div class="flex gap-1 mb-6">
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
+                <div class="testimonial-stars flex gap-1 mb-6">
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
+                  <Icon name="star" class="star w-5 h-5 text-yellow-400" />
                 </div>
                 
                 <!-- Testimonio -->
-                <blockquote class="text-gray-300 text-lg leading-relaxed mb-8">
+                <blockquote class="testimonial-quote text-gray-300 text-lg leading-relaxed mb-8">
                   "Desde el primer contacto hasta la entrega final, todo el proceso fue fluido y profesional. El resultado superó nuestras expectativas y nuestros clientes están encantados con la nueva plataforma."
                 </blockquote>
                 
@@ -220,9 +183,7 @@
               <!-- Button shine effect -->
               <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               
-              <svg class="relative z-10 w-4 h-4 text-gray-400 group-hover:text-green-400 transition-all duration-300 group-hover:-translate-x-0.5 group-hover:drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M15 18l-6-6 6-6"/>
-              </svg>
+              <Icon name="arrow-left" class="relative z-10 w-4 h-4 text-gray-400 group-hover:text-green-400 transition-all duration-300 group-hover:-translate-x-0.5 group-hover:drop-shadow-sm" />
             </button>
             
             <button id="testimonialNextBtn" class="testimonial-nav-btn relative w-11 h-11 bg-gradient-to-br from-gray-800/60 via-gray-900/70 to-black/80 backdrop-blur-sm border border-gray-600/20 hover:border-green-400/60 rounded-2xl flex items-center justify-center transition-all duration-300 group hover:scale-105 hover:shadow-xl hover:shadow-green-500/25 overflow-hidden">
@@ -232,9 +193,7 @@
               <!-- Button shine effect -->
               <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               
-              <svg class="relative z-10 w-4 h-4 text-gray-400 group-hover:text-green-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M9 18l6-6-6-6"/>
-              </svg>
+              <Icon name="arrow-right" class="relative z-10 w-4 h-4 text-gray-400 group-hover:text-green-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:drop-shadow-sm" />
             </button>
           </div>
         </div>
@@ -255,7 +214,6 @@
   
   .testimonials-track {
     width: 300%;
-    will-change: transform;
   }
   
   .testimonial-slide {
@@ -265,27 +223,7 @@
   }
   
   .testimonial-item {
-    will-change: transform, opacity;
     transform-origin: center;
-  }
-  
-  .testimonial-dot.active {
-    background-color: #10b981;
-    width: 1.75rem; /* 28px - más delgado */
-    height: 0.375rem; /* 6px */
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5);
-  }
-  
-  .testimonial-nav-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none !important;
-    pointer-events: none;
-  }
-  
-  .testimonial-nav-btn:disabled .absolute {
-    opacity: 0 !important;
   }
   
   .testimonial-nav-btn:active {

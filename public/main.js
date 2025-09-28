@@ -1,356 +1,159 @@
-// ==========================================
-// MAIN.JS - THEME BASIC FUNCTIONALITY ONLY
-// ==========================================
-// This file contains only basic theme functionality:
-// - Header navigation
-// - Cursor glow effect  
-// - Contact form
-// - Basic utilities
-// All GSAP animations are handled by GSAPLoader.astro
+// Main JavaScript - Header and Mouse Glow functionality only
+document.addEventListener('DOMContentLoaded', function() {
+  initHeader();
+  initMouseGlow();
+});
 
-// ==========================================
-// 1. UTILITY FUNCTIONS
-// ==========================================
-
-// DOM Utilities
-const DOM = {
-  select: (selector, parent = document) => parent.querySelector(selector),
-  selectAll: (selector, parent = document) => parent.querySelectorAll(selector),
-  exists: (selector, parent = document) => !!parent.querySelector(selector),
-  
-  // Event listener with cleanup tracking
-  on: (element, event, handler, options = {}) => {
-    if (!element) return null;
-    element.addEventListener(event, handler, options);
-    return () => element.removeEventListener(event, handler, options);
-  },
-  
-  // Conditional class toggle
-  toggleClass: (element, className, condition) => {
-    if (!element) return;
-    element.classList.toggle(className, condition);
-  },
-  
-  // Set multiple styles at once
-  setStyles: (element, styles) => {
-    if (!element || !styles) return;
-    Object.assign(element.style, styles);
-  }
-};
-
-// Animation Utilities
-const AnimUtils = {
-  // Debounce function for performance
-  debounce: (func, wait) => {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  },
-  
-  // Throttle function for scroll events
-  throttle: (func, limit) => {
-    let inThrottle;
-    return function(...args) {
-      if (!inThrottle) {
-        func.apply(this, args);
-        inThrottle = true;
-        setTimeout(() => inThrottle = false, limit);
-      }
-    };
-  },
-  
-  // Check if element is in viewport
-  isInViewport: (element, threshold = 0) => {
-    if (!element) return false;
-    const rect = element.getBoundingClientRect();
-    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-    const windowWidth = window.innerWidth || document.documentElement.clientWidth;
-    
-    return (
-      rect.top >= -threshold &&
-      rect.left >= -threshold &&
-      rect.bottom <= windowHeight + threshold &&
-      rect.right <= windowWidth + threshold
-    );
-  }
-};
-
-// ==========================================
-// 2. HEADER FUNCTIONALITY
-// ==========================================
 function initHeader() {
-  const header = DOM.select("#main-header");
-  const toggleButton = DOM.select("#header-navbar-toggle");
-  const navbar = DOM.select("#header-navbar");
-  const navLinks = DOM.selectAll("#header-navbar a");
-  const overlay = DOM.select("#mobile-overlay");
+  const header = document.getElementById('main-header');
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
   
-  if (!header) return;
-  
-  // Track cleanup functions
-  const cleanupFunctions = [];
-  
-  // Unified menu state management
-  const setMenuState = (isOpen) => {
-    console.log('Setting menu state to:', isOpen ? 'open' : 'closed');
-    console.log('Elements found:', {
-      header: !!header,
-      navbar: !!navbar,
-      overlay: !!overlay,
-      toggleButton: !!toggleButton
-    });
-    
-    // Toggle classes for menu state
-    DOM.toggleClass(header, 'mobile-menu-open', isOpen);
-    DOM.toggleClass(document.body, 'menu-open', isOpen);
-    
-    // Toggle the mobile menu visibility
-    if (navbar) {
-      DOM.toggleClass(navbar, 'show', isOpen);
-    }
-    
-    // Update ARIA attributes
-    if (toggleButton) {
-      toggleButton.setAttribute('aria-expanded', isOpen.toString());
-      toggleButton.setAttribute('title', isOpen ? 'Cerrar Menú' : 'Mostrar Menú');
-      toggleButton.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Mostrar menú');
-    }
-    
-    console.log('Menu state changed:', isOpen ? 'open' : 'closed');
-    console.log('Navbar classes:', navbar ? navbar.className : 'navbar not found');
-  };
-  
-  // Mobile menu toggle
-  if (toggleButton && navbar) {
-    const toggleCleanup = DOM.on(toggleButton, 'click', (e) => {
-      e.preventDefault();
-      const isCurrentlyOpen = header.classList.contains('mobile-menu-open');
-      setMenuState(!isCurrentlyOpen);
-    });
-    cleanupFunctions.push(toggleCleanup);
-  }
-  
-  // Close menu when clicking nav links (mobile)
-  navLinks.forEach(link => {
-    const linkCleanup = DOM.on(link, 'click', () => {
-      if (window.innerWidth <= 768) {
-        setMenuState(false);
-      }
-    });
-    cleanupFunctions.push(linkCleanup);
+  console.log('Elements found:', {
+    header: !!header,
+    mobileMenuBtn: !!mobileMenuBtn,
+    mobileMenu: !!mobileMenu
   });
   
-  // Close menu when clicking outside (mobile) or on overlay
-  const outsideClickCleanup = DOM.on(document, 'click', (e) => {
-    if (header.classList.contains('mobile-menu-open')) {
-      if (!header.contains(e.target) || e.target === overlay) {
-        setMenuState(false);
-      }
-    }
-  });
-  cleanupFunctions.push(outsideClickCleanup);
-  
-  // Close menu when clicking overlay
-  if (overlay) {
-    const overlayCleanup = DOM.on(overlay, 'click', () => {
-      setMenuState(false);
-    });
-    cleanupFunctions.push(overlayCleanup);
-  }
-  
-  // Scroll behavior - throttled for performance
-  const handleScroll = AnimUtils.throttle(() => {
-    const scrolled = window.scrollY > 50;
-    DOM.toggleClass(header, 'scrolled', scrolled);
-    console.log('Scroll position:', window.scrollY, 'Header scrolled:', scrolled);
-  }, 16); // ~60fps
-  
-  const scrollCleanup = DOM.on(window, 'scroll', handleScroll);
-  cleanupFunctions.push(scrollCleanup);
-  
-  // Handle resize events - debounced
-  const handleResize = AnimUtils.debounce(() => {
-    // Close mobile menu on resize to desktop
-    if (window.innerWidth > 768 && navbar && navbar.classList.contains('show')) {
-      setMenuState(false);
-    }
-  }, 250);
-  
-  const resizeCleanup = DOM.on(window, 'resize', handleResize);
-  cleanupFunctions.push(resizeCleanup);
-  
-  // Initialize scroll state
-  handleScroll();
-
-  // Return cleanup function for potential use
-  return () => cleanupFunctions.forEach(cleanup => cleanup && cleanup());
-}
-
-// ==========================================
-// 3. CURSOR GLOW EFFECT
-// ==========================================
-function initCursorGlow() {
-  const cursorGlow = DOM.select('#cursor-glow');
-  
-  if (!cursorGlow) return;
-  
-  // Only enable on devices with cursor (not touch devices)
-  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-    cursorGlow.style.display = 'none';
+  // Verificar que los elementos necesarios existen
+  if (!header || !mobileMenuBtn || !mobileMenu) {
+    console.error('Missing header elements');
     return;
   }
+
+  // Header scroll effect
+  function handleScroll() {
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+
+  // Mobile menu toggle
+  function toggleMobileMenu() {
+    const isVisible = mobileMenu.classList.contains('opacity-100');
+    console.log('Toggle menu - isVisible:', isVisible);
+    
+    if (!isVisible) {
+      // Show menu
+      mobileMenu.classList.remove('opacity-0', 'invisible');
+      mobileMenu.classList.add('opacity-100', 'visible');
+      mobileMenuBtn.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      console.log('Menu opened');
+    } else {
+      // Hide menu
+      mobileMenu.classList.remove('opacity-100', 'visible');
+      mobileMenu.classList.add('opacity-0', 'invisible');
+      mobileMenuBtn.classList.remove('active');
+      document.body.style.overflow = '';
+      console.log('Menu closed');
+    }
+  }
+
+  // Close menu when clicking on menu links
+  function closeMenuOnLink() {
+    if (mobileMenu.classList.contains('opacity-100')) {
+      mobileMenu.classList.remove('opacity-100', 'visible');
+      mobileMenu.classList.add('opacity-0', 'invisible');
+      mobileMenuBtn.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Event listeners
+  window.addEventListener('scroll', handleScroll);
+  mobileMenuBtn.addEventListener('click', toggleMobileMenu);
   
-  let mouseX = 0, mouseY = 0;
-  let glowX = 0, glowY = 0;
-  let animationId;
+  // Close menu when clicking on navigation links
+  const menuLinks = mobileMenu.querySelectorAll('a');
+  menuLinks.forEach(link => {
+    link.addEventListener('click', closeMenuOnLink);
+  });
+
+  // Close menu on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('opacity-100')) {
+      mobileMenu.classList.remove('opacity-100', 'visible');
+      mobileMenu.classList.add('opacity-0', 'invisible');
+      mobileMenuBtn.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Close menu when clicking outside (on body)
+  document.addEventListener('click', function(e) {
+    if (mobileMenu.classList.contains('opacity-100') && 
+        !mobileMenu.contains(e.target) && 
+        !mobileMenuBtn.contains(e.target)) {
+      mobileMenu.classList.remove('opacity-100', 'visible');
+      mobileMenu.classList.add('opacity-0', 'invisible');
+      mobileMenuBtn.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Initial scroll check
+  handleScroll();
+}
+
+// Mouse Glow Effect
+function initMouseGlow() {
+  const mouseGlow = document.getElementById('mouse-glow');
   
-  // Track cleanup functions
-  const cleanupFunctions = [];
+  if (!mouseGlow) {
+    console.error('Mouse glow element not found');
+    return;
+  }
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let glowX = 0;
+  let glowY = 0;
   
-  // Throttled mouse move handler for performance
-  const handleMouseMove = AnimUtils.throttle((e) => {
+  // Smooth animation with easing
+  function updateGlow() {
+    const ease = 0.1;
+    glowX += (mouseX - glowX) * ease;
+    glowY += (mouseY - glowY) * ease;
+    
+    mouseGlow.style.left = glowX + 'px';
+    mouseGlow.style.top = glowY + 'px';
+    
+    requestAnimationFrame(updateGlow);
+  }
+
+  // Track mouse movement
+  document.addEventListener('mousemove', function(e) {
     mouseX = e.clientX;
     mouseY = e.clientY;
-  }, 16); // ~60fps
+  });
+
+  // Hide glow when mouse leaves window
+  document.addEventListener('mouseleave', function() {
+    mouseGlow.style.opacity = '0';
+  });
+
+  // Show glow when mouse enters window
+  document.addEventListener('mouseenter', function() {
+    mouseGlow.style.opacity = '1';
+  });
+
+  // Enhanced glow on interactive elements
+  const interactiveElements = document.querySelectorAll('a, button, [role="button"]');
   
-  const mouseMoveCleanup = DOM.on(document, 'mousemove', handleMouseMove);
-  cleanupFunctions.push(mouseMoveCleanup);
-  
-  // Smooth animation loop using transform for better performance
-  const animate = () => {
-    // Smooth interpolation for fluid movement
-    glowX += (mouseX - glowX) * 0.1;
-    glowY += (mouseY - glowY) * 0.1;
-    
-    // Use transform instead of left/top for better performance
-    DOM.setStyles(cursorGlow, {
-      transform: `translate(${glowX - 250}px, ${glowY - 250}px)`
+  interactiveElements.forEach(element => {
+    element.addEventListener('mouseenter', function() {
+      mouseGlow.classList.add('enhanced');
     });
     
-    animationId = requestAnimationFrame(animate);
-  };
-  
-  // Start animation
-  animate();
-  
-  // Cleanup function
-  return () => {
-    cleanupFunctions.forEach(cleanup => cleanup && cleanup());
-    if (animationId) {
-      cancelAnimationFrame(animationId);
-    }
-  };
+    element.addEventListener('mouseleave', function() {
+      mouseGlow.classList.remove('enhanced');
+    });
+  });
+
+  // Start animation loop
+  updateGlow();
 }
 
-// ==========================================
-// 4. CONTACT FORM FUNCTIONALITY
-// ==========================================
-function initContactForm() {
-  const form = DOM.select('#contactForm');
-  
-  if (!form) return;
-  
-  const submitButton = DOM.select('#contactForm button[type="submit"]');
-  const originalButtonText = submitButton ? submitButton.textContent : 'Enviar Mensaje';
-  
-  // Form submission handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!submitButton) return;
-    
-    // Update button state
-    submitButton.disabled = true;
-    submitButton.textContent = 'Enviando...';
-    
-    try {
-      // Get form data
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      
-      // Here you would typically send the data to your backend
-      console.log('Form data:', data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Success state
-      submitButton.textContent = '¡Mensaje Enviado!';
-      submitButton.style.backgroundColor = '#10b981';
-      
-      // Reset form
-      form.reset();
-      
-      // Reset button after delay
-      setTimeout(() => {
-        submitButton.disabled = false;
-        submitButton.textContent = originalButtonText;
-        submitButton.style.backgroundColor = '';
-      }, 3000);
-      
-    } catch (error) {
-      console.error('Form submission error:', error);
-      
-      // Error state
-      submitButton.textContent = 'Error - Intentar de nuevo';
-      submitButton.style.backgroundColor = '#ef4444';
-      
-      // Reset button after delay
-      setTimeout(() => {
-        submitButton.disabled = false;
-        submitButton.textContent = originalButtonText;
-        submitButton.style.backgroundColor = '';
-      }, 3000);
-    }
-  };
-  
-  // Add form submission listener
-  return DOM.on(form, 'submit', handleSubmit);
-}
-
-// ==========================================
-// 5. SCROLL UTILITIES
-// ==========================================
-function preventHorizontalScroll() {
-  // Prevent horizontal scroll on the page
-  const preventScroll = (e) => {
-    if (e.shiftKey && (e.deltaX !== 0 || e.deltaY !== 0)) {
-      e.preventDefault();
-    }
-  };
-  
-  return DOM.on(document, 'wheel', preventScroll, { passive: false });
-}
-
-// ==========================================
-// 6. INITIALIZATION
-// ==========================================
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('🚀 Initializing theme basic functionality...');
-  
-  // Initialize basic functionality (non-GSAP)
-  preventHorizontalScroll();
-  initCursorGlow();
-  initHeader();
-  initContactForm();
-  
-  console.log('✅ Theme basic functionality initialized successfully!');
-  console.log('🎬 GSAP animations are handled by GSAPLoader.astro');
-});
-
-// ==========================================
-// 7. GLOBAL ERROR HANDLING
-// ==========================================
-window.addEventListener('error', (e) => {
-  console.error('JavaScript error:', e.error);
-});
-
-window.addEventListener('unhandledrejection', (e) => {
-  console.error('Unhandled promise rejection:', e.reason);
-});

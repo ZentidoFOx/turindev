@@ -1,0 +1,25 @@
+---
+// Icon.astro - Componente helper para usar iconos
+export interface Props {
+  name: string;
+  class?: string;
+  size?: number | string;
+  width?: number | string;
+  height?: number | string;
+}
+
+const { name, class: className = "", size, width, height } = Astro.props;
+
+// Determinar dimensiones
+const iconWidth = width || size || "20";
+const iconHeight = height || size || "20";
+---
+
+<svg 
+  class={className}
+  width={iconWidth}
+  height={iconHeight}
+  aria-hidden="true"
+>
+  <use href={`#ic-${name}`}></use>
+</svg>

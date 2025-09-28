@@ -1,0 +1,37 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout>
+	<Header />
+	<main class="w-full overflow-x-hidden">
+		<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+			
+			<!-- Portfolio Hero -->
+			<section class="portfolio-hero py-20">
+				<h1 class="portfolio-title text-5xl font-bold text-white mb-6">
+					Nuestro Portafolio
+				</h1>
+			</section>
+			
+			<!-- Portfolio Grid -->
+			<section class="portfolio-grid-section py-20">
+				<div class="portfolio-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+					<!-- Portfolio items -->
+				</div>
+			</section>
+			
+		</div>
+	</main>
+	<Footer />
+	
+	<!-- Register multiple animation systems for this page -->
+	<script is:inline>
+	  // Register multiple animation systems
+	  window.animationSystems = window.animationSystems || {};
+	  window.animationSystems.portfolio = () => import('/js/animations/portfolio/index.js');
+	  window.animationSystems.gallery = () => import('/js/animations/gallery/index.js');
+	</script>
+</Layout>

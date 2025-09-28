@@ -1,0 +1,52 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout>
+	<Header />
+	<main class="w-full overflow-x-hidden">
+		<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+			
+			<!-- About Hero Section -->
+			<section class="about-hero-section py-20">
+				<h1 class="about-hero-title text-5xl font-bold text-white mb-6">
+					Sobre Nosotros
+				</h1>
+				<p class="about-hero-description text-xl text-gray-400 mb-8">
+					Conoce más sobre nuestra historia y misión
+				</p>
+				<div class="about-profile-image w-64 h-64 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto"></div>
+			</section>
+			
+			<!-- Team Section -->
+			<section class="team-section py-20">
+				<h2 class="team-title text-3xl font-bold text-white mb-12">Nuestro Equipo</h2>
+				<div class="team-grid grid grid-cols-1 md:grid-cols-3 gap-8">
+					<div class="team-member bg-gray-900 p-6 rounded-lg">
+						<h3 class="team-member-name text-xl font-semibold text-white">Juan Pérez</h3>
+						<p class="team-member-role text-gray-400">CEO & Founder</p>
+					</div>
+					<div class="team-member bg-gray-900 p-6 rounded-lg">
+						<h3 class="team-member-name text-xl font-semibold text-white">María García</h3>
+						<p class="team-member-role text-gray-400">CTO</p>
+					</div>
+					<div class="team-member bg-gray-900 p-6 rounded-lg">
+						<h3 class="team-member-name text-xl font-semibold text-white">Carlos López</h3>
+						<p class="team-member-role text-gray-400">Lead Developer</p>
+					</div>
+				</div>
+			</section>
+			
+		</div>
+	</main>
+	<Footer />
+	
+	<!-- Register animations for this page -->
+	<script is:inline>
+	  // Register about page animations
+	  window.animationSystems = window.animationSystems || {};
+	  window.animationSystems.about = () => import('/js/animations/about/index.js');
+	</script>
+</Layout>

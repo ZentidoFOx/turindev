@@ -2,15 +2,13 @@
 import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 import Header from "../components/Header.astro";
-import Hero from "../components/Hero.astro";
-import Portafolio from "../components/Portafolio.astro";
-import Testimonios from "../components/Testimonios.astro";
-import Servicios from "../components/Servicios.astro";
+import Hero from "../components/home/Hero.astro";
+import Portafolio from "../components/home/Portafolio.astro";
+import Testimonios from "../components/home/Testimonios.astro";
+import Servicios from "../components/home/Servicios.astro";
 import Footer from "../components/Footer.astro";
-import Blogs from "../components/Blogs.astro";
-import Contacto from "../components/Contacto.astro";
-
-
+import Blogs from "../components/home/Blogs.astro";
+import Contacto from "../components/home/Contacto.astro";
 ---
 <Layout>
 	<Header />
@@ -25,4 +23,11 @@ import Contacto from "../components/Contacto.astro";
 		</div>
 	</main>
 	<Footer />
+	
+	<!-- Register animations for this page -->
+	<script is:inline>
+	  // Register home page animations
+	  window.animationSystems = window.animationSystems || {};
+	  window.animationSystems.home = () => import('/js/animations/index.js');
+	</script>
 </Layout>

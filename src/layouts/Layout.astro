@@ -1,5 +1,6 @@
 ---
-import GSAPLoader from '../components/GSAPLoader.astro';
+// Layout principal sin GSAP
+import Icons from "../components/Icons.astro";
 ---
 <!doctype html>
 <html lang="es">
@@ -10,13 +11,12 @@ import GSAPLoader from '../components/GSAPLoader.astro';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     
+    <!-- Critical CSS - Load fonts early -->
+    <link rel="stylesheet" href="/fonts/inter-local.css">
+    
     <!-- Preload critical resources -->
-    <link rel="preload" href="/main.js" as="script">
     <link rel="preload" href="/images/bg.avif" as="image" type="image/avif">
     
-    <!-- Resource hints for better performance -->
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <!-- Bloquear indexación -->
     <meta name="robots" content="noindex, nofollow" />
 
@@ -26,31 +26,14 @@ import GSAPLoader from '../components/GSAPLoader.astro';
       name="description"
       content="En Turin.dev creamos lugares web modernos, rápidos y optimizados. Agencia de desarrollo web con soluciones en diseño, frontend, backend y SEO."
     />
-
-    <!-- Preconnect to Google Fonts for faster loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-      media="print" 
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
-    </noscript>
     
   </head>
   <body class="bg-black overflow-x-hidden">
-    <!-- Cursor glow effect -->
-    <div id="cursor-glow" class="cursor-glow"></div>
-    <slot />
+    <!-- Mouse Glow Effect -->
+    <div id="mouse-glow" class="mouse-glow"></div>
     
-    <!-- Defer non-critical JavaScript for better performance -->
-    <GSAPLoader />
+    <Icons />
+    <slot />
     
     <!-- Critical performance script -->
     <script is:inline>
@@ -65,18 +48,38 @@ import GSAPLoader from '../components/GSAPLoader.astro';
       }, 2000);
     </script>
     
-    <!-- Main JavaScript - Deferred -->
-    <script is:inline src="/main.js" defer></script>
+    <!-- GSAP Library -->
+    <script>
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import { Draggable } from 'gsap/Draggable';
+      
+      // Register GSAP plugins
+      gsap.registerPlugin(ScrollTrigger, Draggable);
+      
+      // Make GSAP available globally
+      (globalThis as any).gsap = gsap;
+      (globalThis as any).ScrollTrigger = ScrollTrigger;
+      (globalThis as any).Draggable = Draggable;
+      
+      // Dispatch event when GSAP is ready
+      document.addEventListener('DOMContentLoaded', () => {
+        document.dispatchEvent(new CustomEvent('gsapReady'));
+      });
+    </script>
+    
+    <!-- Main JavaScript -->
+    <script is:inline src="/main.js"></script>
+    
+    <!-- GSAP Animation System -->
+    <script is:inline src="/js/gsap-init.js"></script>
   </body>
 </html>
 
 <style>
-  html {
-    overflow-x: hidden;
-  }
-  
+
   body {
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Inter';
     background-color: #020617;
     color: #fff;
     overflow-x: hidden;
@@ -84,6 +87,8 @@ import GSAPLoader from '../components/GSAPLoader.astro';
     max-width: 100vw;
     /* Defer background image loading */
     background-image: none;
+    /* Prevent font loading flash */
+    font-display: swap;
   }
   
   /* Load background image after critical content */
@@ -95,40 +100,12 @@ import GSAPLoader from '../components/GSAPLoader.astro';
     transition: background-color .3s, color .3s;
   }
 
-  /* Cursor glow effect */
-  .cursor-glow {
-    position: fixed;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, rgba(16, 185, 129, 0.08) 40%, rgba(34, 197, 94, 0) 70%);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: -1;
-    will-change: transform;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    top: 50%;
-    transition: opacity 0.3s ease;
-    opacity: 0;
-  }
 
-  @media (hover: hover) and (pointer: fine) {
-    .cursor-glow {
-      opacity: 1;
-    }
-  }
-
-  /* Estados iniciales para GSAP */
-  .fade-up, .fade-left, .fade-right, .scale-up, .stagger-item {
-    opacity: 0;
-  }
+  /* Elementos visibles por defecto sin animaciones */
 
   /* Prevent horizontal scroll globally */
   * {
     box-sizing: border-box;
-  }
-  
-  *:not(.tech-carousel) {
     max-width: 100%;
   }
   
@@ -141,6 +118,44 @@ import GSAPLoader from '../components/GSAPLoader.astro';
   /* Fix for absolute positioned elements */
   .absolute {
     max-width: 100vw;
+  }
+
+  /* Mouse Glow Effect */
+  .mouse-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(
+      circle,
+      rgba(52, 211, 153, 0.15) 0%,
+      rgba(16, 185, 129, 0.12) 20%,
+      rgba(5, 150, 105, 0.08) 40%,
+      rgba(52, 211, 153, 0.04) 60%,
+      rgba(16, 185, 129, 0) 80%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    will-change: transform;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    transition: opacity 0.3s ease;
+    opacity: 1;
+  }
+
+  /* Enhanced glow on interactive elements */
+  .mouse-glow.enhanced {
+    background: radial-gradient(
+      circle,
+      rgba(52, 211, 153, 0.25) 0%,
+      rgba(16, 185, 129, 0.18) 20%,
+      rgba(5, 150, 105, 0.12) 40%,
+      rgba(52, 211, 153, 0.06) 60%,
+      rgba(16, 185, 129, 0) 80%
+    );
+    width: 400px;
+    height: 400px;
   }
 
 </style>
