@@ -8,10 +8,11 @@ export default defineConfig({
     output: 'static',
     adapter: vercel({
         webAnalytics: {
-            enabled: true,
+            enabled: false, // Disabled to avoid 404 errors and improve performance
         }
     }),
     vite: {
+        // @ts-ignore - Temporary ignore for Tailwind plugin compatibility
         plugins: [tailwindcss()],
     },
 });
