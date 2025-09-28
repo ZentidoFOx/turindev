@@ -75,7 +75,7 @@ import Icons from "../components/Icons.astro";
         letter-spacing: -0.02em;
       }
       
-      /* Mouse glow - only show after load to avoid layout shift */
+      /* Mouse glow - optimized to prevent forced reflow */
       .mouse-glow {
         position: fixed;
         width: 300px;
@@ -86,8 +86,102 @@ import Icons from "../components/Icons.astro";
         transform: translate(-50%, -50%);
         opacity: 0;
         transition: opacity 0.3s ease;
+        will-change: transform, opacity;
+        contain: layout style paint;
+      }
+      
+      /* Critical header styles - optimized for performance */
+      #main-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        height: 4rem;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+        will-change: background-color, backdrop-filter;
+        contain: layout style;
+      }
+      
+      /* Critical button styles */
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #059669, #10b981);
+        color: white;
+        font-weight: 600;
+        border-radius: 1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+      }
+      
+      /* Additional critical styles to reduce render blocking */
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      
+      .grid {
+        display: grid;
+      }
+      
+      .flex {
+        display: flex;
+      }
+      
+      .hidden {
+        display: none;
+      }
+      
+      .text-center {
+        text-align: center;
+      }
+      
+      .text-white {
+        color: #ffffff;
+      }
+      
+      .bg-black {
+        background-color: #000000;
+      }
+      
+      /* Critical responsive utilities */
+      @media (min-width: 768px) {
+        .md\:flex {
+          display: flex;
+        }
+        .md\:hidden {
+          display: none;
+        }
+      }
+      
+      @media (max-width: 767px) {
+        .mobile-menu {
+          position: fixed;
+          top: 4rem;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.95);
+          backdrop-filter: blur(20px);
+          z-index: 40;
+        }
       }
     </style>
+    
+    <!-- CSS will be loaded normally by Astro - no manual loading needed -->
     
     <!-- Fonts loaded inline - no external CSS blocking -->
     
@@ -143,95 +237,74 @@ import Icons from "../components/Icons.astro";
       }, 3000);
     </script>
     
-    <!-- Main JavaScript - Carga inmediata -->
-    <script is:inline src="/main.js"></script>
+    <!-- Critical JavaScript inline for immediate execution -->
+    <script is:inline>
+      // Critical header functionality inline
+      function initHeaderCritical() {
+        const header = document.getElementById('main-header');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (!header || !mobileMenuBtn || !mobileMenu) return;
+        
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', function() {
+          const isHidden = mobileMenu.classList.contains('hidden');
+          if (isHidden) {
+            mobileMenu.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+          } else {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+          }
+        });
+        
+        // Close menu on link click
+        const menuLinks = mobileMenu.querySelectorAll('a');
+        menuLinks.forEach(function(link) {
+          link.addEventListener('click', function() {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+          });
+        });
+      }
+      
+      // Initialize immediately
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHeaderCritical);
+      } else {
+        initHeaderCritical();
+      }
+    </script>
     
-    <!-- GSAP Animation System - Carga diferida -->
-    <script is:inline src="/js/gsap-init.js" defer></script>
+    <!-- Load non-critical JavaScript async - optimized -->
+    <script is:inline>
+      // Load scripts asynchronously - optimized to prevent forced reflow
+      function loadScript(src) {
+        var script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+      
+      // Load after initial render - with idle callback optimization
+      function initAsyncScripts() {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(function() {
+            loadScript('/main.js');
+            loadScript('/js/gsap-init.js');
+          }, { timeout: 1000 });
+        } else {
+          setTimeout(function() {
+            loadScript('/main.js');
+            loadScript('/js/gsap-init.js');
+          }, 200);
+        }
+      }
+      
+      // Initialize when browser is idle
+      initAsyncScripts();
+    </script>
   </body>
 </html>
-
-<style>
-
-  body {
-    font-family: 'Inter';
-    background-color: #020617;
-    color: #fff;
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
-    /* Defer background image loading */
-    background-image: none;
-    /* Prevent font loading flash */
-    font-display: swap;
-  }
-  
-  /* Load background image after critical content */
-  body.loaded {
-    background-image: url(/images/bg.avif);
-    background-position: 0 0;
-    background-repeat: repeat-y;
-    background-size: auto;
-    transition: background-color .3s, color .3s;
-  }
-
-
-  /* Elementos visibles por defecto sin animaciones */
-
-  /* Prevent horizontal scroll globally */
-  * {
-    box-sizing: border-box;
-    max-width: 100%;
-  }
-  
-  /* Ensure all sections respect viewport width */
-  section, main, div {
-    max-width: 100vw;
-    overflow-x: hidden;
-  }
-  
-  /* Fix for absolute positioned elements */
-  .absolute {
-    max-width: 100vw;
-  }
-
-  /* Mouse Glow Effect */
-  .mouse-glow {
-    position: fixed;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(
-      circle,
-      rgba(52, 211, 153, 0.15) 0%,
-      rgba(16, 185, 129, 0.12) 20%,
-      rgba(5, 150, 105, 0.08) 40%,
-      rgba(52, 211, 153, 0.04) 60%,
-      rgba(16, 185, 129, 0) 80%
-    );
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1;
-    will-change: transform;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    top: 50%;
-    transition: opacity 0.3s ease;
-    opacity: 1;
-  }
-
-  /* Enhanced glow on interactive elements */
-  .mouse-glow.enhanced {
-    background: radial-gradient(
-      circle,
-      rgba(52, 211, 153, 0.25) 0%,
-      rgba(16, 185, 129, 0.18) 20%,
-      rgba(5, 150, 105, 0.12) 40%,
-      rgba(52, 211, 153, 0.06) 60%,
-      rgba(16, 185, 129, 0) 80%
-    );
-    width: 400px;
-    height: 400px;
-  }
-
-</style>
-

@@ -296,13 +296,30 @@ function initHeader() {
     return;
   }
 
-  // Header scroll effect
+  // Header scroll effect - optimized to prevent forced reflow
+  let ticking = false;
+  let lastScrollY = 0;
+  
   function handleScroll() {
-    if (window.scrollY > 50) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
+    lastScrollY = window.scrollY;
+    
+    if (!ticking) {
+      requestAnimationFrame(updateHeader);
+      ticking = true;
     }
+  }
+  
+  function updateHeader() {
+    if (lastScrollY > 50) {
+      if (!header.classList.contains('scrolled')) {
+        header.classList.add('scrolled');
+      }
+    } else {
+      if (header.classList.contains('scrolled')) {
+        header.classList.remove('scrolled');
+      }
+    }
+    ticking = false;
   }
 
   // Mobile menu toggle
