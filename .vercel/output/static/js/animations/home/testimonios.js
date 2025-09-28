@@ -14,10 +14,7 @@ export function initTestimoniosAnimations() {
 
   console.log('🎬 Initializing Testimonios animations...');
 
-  // Animate testimonios badge
-  initTestimoniosBadgeAnimation();
-
-  // Animate section elements
+  // Animate section elements (includes badge)
   initTestimoniosElementsAnimation();
 
   // Initialize testimonial slider with pagination
@@ -29,87 +26,26 @@ export function initTestimoniosAnimations() {
   console.log('✅ Testimonios animations initialized');
 }
 
-// Testimonios badge animation
-function initTestimoniosBadgeAnimation() {
-  const testimoniosBadge = document.querySelector('.testimonios-section .inline-flex');
-  
-  if (!testimoniosBadge) {
-    console.log('❌ Testimonios badge not found');
+// Testimonios elements animation - Optimized with utilities
+function initTestimoniosElementsAnimation() {
+  // Wait for AnimationUtils to be available
+  if (typeof window.AnimationUtils === 'undefined') {
+    setTimeout(() => initTestimoniosElementsAnimation(), 100);
     return;
   }
 
-  console.log('🎯 Initializing testimonios badge animation...');
+  const { AnimationUtils } = window;
 
-  // Simple badge entrance
-  gsap.fromTo(testimoniosBadge, 
-    {
-      y: 20,
-      opacity: 0
-    },
-    {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: '.testimonios-section',
-        start: "top 85%",
-        toggleActions: "play none none reverse"
-      }
-    }
-  );
+  // Animate testimonios badge using utility
+  AnimationUtils.animateBadge('.testimonios-section .inline-flex', '.testimonios-section');
 
-  console.log('✅ Testimonios badge animation initialized');
-}
+  // Animate section title using utility
+  AnimationUtils.animateTitle('.testimonios-title');
 
-// Testimonios elements animation
-function initTestimoniosElementsAnimation() {
-  // Animate section title
-  const testimoniosTitle = document.querySelector('.testimonios-title');
-  if (testimoniosTitle) {
-    gsap.fromTo('.testimonios-title', 
-      {
-        y: 30,
-        opacity: 0
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: '.testimonios-title',
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-  }
+  // Animate testimonial cards using utility
+  AnimationUtils.animateCards('.testimonial-card', '.testimonials-slider');
 
-  // Animate testimonial cards
-  const testimonialCards = document.querySelectorAll('.testimonial-card');
-  if (testimonialCards.length > 0) {
-    gsap.fromTo('.testimonial-card', 
-      {
-        y: 40,
-        opacity: 0
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: '.testimonials-slider',
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-  }
-
-  console.log('✅ Testimonios elements animation initialized');
+  console.log('✅ Testimonios elements animation initialized with utilities');
 }
 
 // Stars animation
@@ -224,16 +160,16 @@ function initTestimonialSlider() {
           width: '24px', // w-6
           backgroundColor: 'rgb(34, 197, 94)', // bg-green-500
           boxShadow: '0 4px 14px 0 rgba(34, 197, 94, 0.4)',
-          duration: 0.3,
-          ease: "power2.out"
+          duration: window.ANIMATION_CONFIG?.DURATION?.fast || 0.3,
+          ease: window.ANIMATION_CONFIG?.EASING?.smooth || "power2.out"
         });
       } else {
         gsap.to(dot, {
           width: '16px', // w-4
           backgroundColor: 'rgba(75, 85, 99, 0.6)', // bg-gray-600/60
           boxShadow: 'none',
-          duration: 0.3,
-          ease: "power2.out"
+          duration: window.ANIMATION_CONFIG?.DURATION?.fast || 0.3,
+          ease: window.ANIMATION_CONFIG?.EASING?.smooth || "power2.out"
         });
       }
     });

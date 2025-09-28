@@ -14,10 +14,7 @@ export function initPortafolioAnimations() {
 
   console.log('🎬 Initializing Portafolio animations...');
 
-  // Animate portafolio badge
-  initPortafolioBadgeAnimation();
-
-  // Animate section elements
+  // Animate section elements (includes badge)
   initPortafolioElementsAnimation();
 
   // Initialize portfolio tabs functionality
@@ -26,110 +23,33 @@ export function initPortafolioAnimations() {
   console.log('✅ Portafolio animations initialized');
 }
 
-// Portafolio badge animation
-function initPortafolioBadgeAnimation() {
-  const portafolioBadge = document.querySelector('.portafolio-section .inline-flex');
-  
-  if (!portafolioBadge) {
-    console.log('❌ Portafolio badge not found');
+// Portafolio elements animation - Optimized with utilities
+function initPortafolioElementsAnimation() {
+  // Wait for AnimationUtils to be available
+  if (typeof window.AnimationUtils === 'undefined') {
+    setTimeout(() => initPortafolioElementsAnimation(), 100);
     return;
   }
 
-  console.log('🎯 Initializing portafolio badge animation...');
+  const { AnimationUtils } = window;
 
-  // Simple badge entrance
-  gsap.fromTo(portafolioBadge, 
-    {
-      y: 20,
-      opacity: 0
-    },
-    {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: '.portafolio-section',
-        start: "top 85%",
-        toggleActions: "play none none reverse"
-      }
-    }
-  );
+  // Animate portafolio badge using utility
+  AnimationUtils.animateBadge('.portafolio-section .inline-flex', '.portafolio-section');
 
-  console.log('✅ Portafolio badge animation initialized');
-}
+  // Animate section title using utility
+  AnimationUtils.animateTitle('.portafolio-title');
 
-// Portafolio elements animation
-function initPortafolioElementsAnimation() {
-  // Animate section title
-  const portafolioTitle = document.querySelector('.portafolio-title');
-  if (portafolioTitle) {
-    gsap.fromTo('.portafolio-title', 
-      {
-        y: 30,
-        opacity: 0
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: '.portafolio-title',
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-  }
+  // Animate filter tabs using utility
+  AnimationUtils.animateCards('.portfolio-filter', '.portfolio-filters', { 
+    y: 20, 
+    stagger: 0.1, 
+    duration: window.ANIMATION_CONFIG.DURATION.normal 
+  });
 
-  // Animate filter tabs
-  const portfolioFilters = document.querySelectorAll('.portfolio-filter');
-  if (portfolioFilters.length > 0) {
-    gsap.fromTo('.portfolio-filter', 
-      {
-        y: 20,
-        opacity: 0
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: "power2.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: '.portfolio-filters',
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-  }
+  // Animate portfolio items using utility
+  AnimationUtils.animateCards('.portfolio-item', '.portfolio-grid');
 
-  // Animate portfolio items
-  const portfolioItems = document.querySelectorAll('.portfolio-item');
-  if (portfolioItems.length > 0) {
-    gsap.fromTo('.portfolio-item', 
-      {
-        y: 40,
-        opacity: 0
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: '.portfolio-grid',
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-  }
-
-  console.log('✅ Portafolio elements animation initialized');
+  console.log('✅ Portafolio elements animation initialized with utilities');
 }
 
 // Portfolio tabs functionality
@@ -284,24 +204,16 @@ function initPortafolioTabs() {
       // Remove active class from all buttons with smooth transition
       filterButtons.forEach(btn => {
         btn.classList.remove('active');
-        gsap.to(btn, {
-          backgroundColor: 'transparent',
-          color: 'rgb(156, 163, 175)', // Gris claro
-          borderColor: 'transparent',
-          duration: 0.3,
-          ease: "power2.out"
-        });
+        if (window.AnimationUtils) {
+          window.AnimationUtils.animateButtonState(btn, false);
+        }
       });
       
       // Add active class to clicked button with smooth transition
       button.classList.add('active');
-      gsap.to(button, {
-        backgroundColor: 'rgb(34, 197, 94)', // Verde sólido
-        color: 'rgb(255, 255, 255)', // Blanco para mejor contraste
-        borderColor: 'rgb(34, 197, 94)',
-        duration: 0.3,
-        ease: "power2.out"
-      });
+      if (window.AnimationUtils) {
+        window.AnimationUtils.animateButtonState(button, true);
+      }
       
       // Filter portfolio items
       filterPortfolio(filterValue);
@@ -312,15 +224,10 @@ function initPortafolioTabs() {
 
   // Set initial active state with smooth transition
   const activeButton = document.querySelector('.portfolio-filter.active');
-  if (activeButton) {
-    gsap.to(activeButton, {
-      backgroundColor: 'rgb(34, 197, 94)', // Verde sólido
-      color: 'rgb(255, 255, 255)', // Blanco para mejor contraste
-      borderColor: 'rgb(34, 197, 94)',
-      duration: 0.5,
-      ease: "power2.out",
-      delay: 0.2
-    });
+  if (activeButton && window.AnimationUtils) {
+    setTimeout(() => {
+      window.AnimationUtils.animateButtonState(activeButton, true);
+    }, 200);
   }
 
   console.log('✅ Portfolio tabs functionality initialized');
