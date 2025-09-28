@@ -9,6 +9,14 @@ import GSAPLoader from '../components/GSAPLoader.astro';
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/main.js" as="script">
+    <link rel="preload" href="/images/bg.avif" as="image" type="image/avif">
+    
+    <!-- Resource hints for better performance -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <!-- Bloquear indexación -->
     <meta name="robots" content="noindex, nofollow" />
 
@@ -19,10 +27,21 @@ import GSAPLoader from '../components/GSAPLoader.astro';
       content="En Turin.dev creamos lugares web modernos, rápidos y optimizados. Agencia de desarrollo web con soluciones en diseño, frontend, backend y SEO."
     />
 
+    <!-- Preconnect to Google Fonts for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
+      media="print" 
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     
   </head>
   <body class="bg-black overflow-x-hidden">
@@ -30,11 +49,24 @@ import GSAPLoader from '../components/GSAPLoader.astro';
     <div id="cursor-glow" class="cursor-glow"></div>
     <slot />
     
-    <!-- GSAP Loader Component -->
+    <!-- Defer non-critical JavaScript for better performance -->
     <GSAPLoader />
     
-    <!-- Main JavaScript -->
-    <script is:inline src="/main.js"></script>
+    <!-- Critical performance script -->
+    <script is:inline>
+      // Load background image after critical content
+      window.addEventListener('load', function() {
+        document.body.classList.add('loaded');
+      });
+      
+      // Fallback for slow connections
+      setTimeout(function() {
+        document.body.classList.add('loaded');
+      }, 2000);
+    </script>
+    
+    <!-- Main JavaScript - Deferred -->
+    <script is:inline src="/main.js" defer></script>
   </body>
 </html>
 
@@ -44,17 +76,23 @@ import GSAPLoader from '../components/GSAPLoader.astro';
   }
   
   body {
-    font-family: Inter, Inter Prevent Layout Shift, system-ui, sans-serif;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background-color: #020617;
     color: #fff;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    /* Defer background image loading */
+    background-image: none;
+  }
+  
+  /* Load background image after critical content */
+  body.loaded {
     background-image: url(/images/bg.avif);
     background-position: 0 0;
     background-repeat: repeat-y;
     background-size: auto;
     transition: background-color .3s, color .3s;
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
   }
 
   /* Cursor glow effect */

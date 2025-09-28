@@ -757,7 +757,9 @@ const ANIMATION_PRESETS = {
   bounce: { y: 40, opacity: 0, scale: 0.9 },
   elastic: { scale: 0, opacity: 0 },
   badge: { y: 30, opacity: 0, scale: 0.8 },
-  icon: { rotation: -15, scale: 0 }
+  icon: { rotation: -15, scale: 0 },
+  textReveal: { y: 40, opacity: 0, skewY: 3 },
+  gentleFade: { y: 20, opacity: 0, scale: 0.95 }
 };
 
 const EASING_PRESETS = {
@@ -818,69 +820,48 @@ function createHeroTimeline() {
   
   const tl = gsap.timeline({ defaults: { ease: EASING_PRESETS.smooth } });
 
-  // Set initial states to prevent FOUC and reverse animations
-  gsap.set([
-    '.hero-title', '.hero-title + p', '.hero-cta', '.hero-social a', 
-    '.hero-stat', '.hero-visual', '.tech-title', '.tech-carousel-container', 
-    '.tech-carousel', '.tech-item', '.animate-bounce', '.blur-2xl', '.blur-3xl'
-  ], { opacity: 0 });
-
-  // Hero sequence
-  tl.fromTo('.hero-title', 
-    ANIMATION_PRESETS.bounce, 
-    { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: EASING_PRESETS.dramatic }, 0.3)
+  // Hero sequence - Subtle animations from natural state
+  tl.from('.hero-title', 
+    { y: 20, skewY: 2, duration: 1.0, ease: EASING_PRESETS.smooth }, 0.1)
     
-  .fromTo('.hero-visual', 
-    ANIMATION_PRESETS.fadeRight, 
-    { opacity: 1, x: 0, scale: 1, duration: 1.0 }, 0.6)
+  .from('.hero-title + p', 
+    { y: 15, opacity: 0.3, duration: 0.8, ease: EASING_PRESETS.smooth }, 0.3)
     
-  .fromTo('.hero-title + p', 
-    ANIMATION_PRESETS.slideUp, 
-    { opacity: 1, y: 0, duration: 0.8 }, 0.8)
+  .from('.hero-visual', 
+    { x: 30, scale: 0.98, duration: 1.0, ease: EASING_PRESETS.smooth }, 0.4)
     
-  .fromTo('.hero-cta', 
-    ANIMATION_PRESETS.bounce, 
-    { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: EASING_PRESETS.bounce }, 1.2)
+  .from('.hero-cta', 
+    { y: 10, scale: 0.98, duration: 0.6, ease: EASING_PRESETS.smooth }, 0.6)
     
-  .fromTo('.hero-social a', 
-    ANIMATION_PRESETS.elastic, 
-    { opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, ease: EASING_PRESETS.bounce }, 1.4)
+  .from('.hero-social a', 
+    { scale: 0.9, duration: 0.4, stagger: 0.08, ease: EASING_PRESETS.smooth }, 0.8)
     
-  .fromTo('.hero-stat', 
-    ANIMATION_PRESETS.bounce, 
+  .from('.hero-stat', 
     { 
-      opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.15, ease: EASING_PRESETS.bounce,
+      y: 10, scale: 0.98, duration: 0.6, stagger: 0.1, ease: EASING_PRESETS.smooth,
       onComplete: () => initGSAPCounters()
-    }, 1.6)
+    }, 1.0)
     
-  .fromTo('.tech-title', 
-    ANIMATION_PRESETS.badge, 
-    { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: EASING_PRESETS.bounce }, 1.8)
+  .from('.tech-title', 
+    { y: 15, scale: 0.98, duration: 0.6, ease: EASING_PRESETS.smooth }, 1.2)
     
-  .fromTo('.tech-title svg', 
-    ANIMATION_PRESETS.icon, 
-    { rotation: 0, scale: 1, duration: 0.6, ease: EASING_PRESETS.elastic }, 1.9)
+  .from('.tech-title svg', 
+    { scale: 0.9, duration: 0.4, ease: EASING_PRESETS.smooth }, 1.3)
     
-  .fromTo('.tech-carousel-container', 
-    { opacity: 0, y: 30, scale: 0.95 }, 
-    { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power2.out" }, 1.95)
+  .from('.tech-carousel-container', 
+    { y: 20, scale: 0.98, duration: 0.8, ease: EASING_PRESETS.smooth }, 1.4)
     
-  .fromTo('.tech-carousel', 
-    ANIMATION_PRESETS.slideUp, 
-    { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, 2.0)
+  .from('.tech-carousel', 
+    { y: 10, duration: 0.6, ease: EASING_PRESETS.smooth }, 1.5)
     
-  .fromTo('.tech-item', 
-    { scale: 0, opacity: 0, y: 20, rotation: -5 }, 
+  .from('.tech-item', 
     { 
-      opacity: 1, 
-      scale: 1, 
-      y: 0,
-      rotation: 0, 
-      duration: 0.8, 
-      stagger: 0.08, 
-      ease: "back.out(1.7)",
-      delay: 0.3
-    }, 2.2);
+      scale: 0.95, 
+      y: 8,
+      duration: 0.5, 
+      stagger: 0.05, 
+      ease: EASING_PRESETS.smooth
+    }, 1.6);
 
   // Mark as created to prevent duplicate executions
   heroTimelineCreated = true;
@@ -907,14 +888,10 @@ function createBackgroundAnimations() {
   
   const tl = gsap.timeline();
 
-  // Set initial state
-  gsap.set(['.blur-2xl', '.blur-3xl', '.animate-bounce'], { opacity: 0 });
-
-  // Background gradients
-  tl.fromTo('.blur-2xl, .blur-3xl', 
-    { scale: 0, opacity: 0 }, 
+  // Background gradients - subtle entrance
+  tl.from('.blur-2xl, .blur-3xl', 
     { 
-      scale: 1, opacity: 1, duration: 1.5, stagger: 0.3, ease: EASING_PRESETS.smooth,
+      scale: 0.9, opacity: 0.5, duration: 2.0, stagger: 0.5, ease: EASING_PRESETS.smooth,
       onComplete: function() {
         // Continuous floating after initial animation
         gsap.to('.blur-2xl, .blur-3xl', {
@@ -929,11 +906,10 @@ function createBackgroundAnimations() {
       }
     }, 0)
     
-  // Floating particles
-  .fromTo('.animate-bounce', 
-    ANIMATION_PRESETS.elastic, 
+  // Floating particles - subtle entrance
+  .from('.animate-bounce', 
     { 
-      opacity: 1, scale: 1, duration: 0.8, stagger: 0.2, ease: EASING_PRESETS.elastic,
+      scale: 0.8, opacity: 0.3, duration: 1.2, stagger: 0.3, ease: EASING_PRESETS.smooth,
       onComplete: function() {
         // Continuous floating
         gsap.to('.animate-bounce', {
@@ -945,7 +921,7 @@ function createBackgroundAnimations() {
           stagger: 0.3
         });
       }
-    }, 2.5);
+    }, 2.0);
 
   // Mark as created to prevent duplicate executions
   backgroundAnimationsCreated = true;
@@ -1203,25 +1179,35 @@ function initGSAPAnimations() {
     console.log('GSAP already initialized, skipping...');
     return;
   }
+  
+  console.log('Checking GSAP availability...', {
+    gsap: typeof gsap !== 'undefined',
+    ScrollTrigger: typeof ScrollTrigger !== 'undefined',
+    Draggable: typeof Draggable !== 'undefined'
+  });
+  
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof Draggable !== 'undefined') {
     try {
       // Initialize all GSAP components in the correct order
       console.log('Initializing all GSAP animations...');
       
       // 1. Initialize main Hero and background animations
+      console.log('Step 1: Initializing Hero and background animations');
       initializeGSAPAnimations();
       
       // 2. Initialize Portfolio functionality
+      console.log('Step 2: Initializing Portfolio functionality');
       initGSAPPortfolio();
       
       // 3. Initialize Testimonials slider
+      console.log('Step 3: Initializing Testimonials slider');
       initGSAPTestimonials();
       
       // Mark as initialized to prevent duplicate runs
       gsapInitialized = true;
-      console.log('All GSAP animations initialized successfully from node_modules');
+      console.log('✅ All GSAP animations initialized successfully from node_modules');
     } catch (error) {
-      console.error('Error initializing GSAP animations:', error);
+      console.error('❌ Error initializing GSAP animations:', error);
       // Fallback: try to initialize draggable only if Draggable is available
       if (typeof Draggable !== 'undefined') {
         setTimeout(() => {
@@ -1230,17 +1216,19 @@ function initGSAPAnimations() {
       }
     }
   } else {
-    console.warn('GSAP not available. Animations will not work.');
+    console.warn('⚠️ GSAP not available. Animations will not work.');
   }
 }
 
 // Listen for GSAP ready event with additional safety checks
 document.addEventListener('gsapReady', function() {
   console.log('GSAP ready event received');
-  // Add a small delay to ensure DOM is fully ready
-  setTimeout(() => {
-    initGSAPAnimations();
-  }, 100);
+  // Use requestAnimationFrame to ensure proper timing
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      initGSAPAnimations();
+    }, 100);
+  });
 });
 
 // Fallback: Initialize GSAP after a timeout if event doesn't fire
