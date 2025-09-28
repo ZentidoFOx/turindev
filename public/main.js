@@ -4,9 +4,9 @@ initHeader();
 
 // Defer non-critical features
 document.addEventListener('DOMContentLoaded', function() {
-  // Only init mouse glow after DOM is ready
-  if (window.innerWidth > 768) { // Only on desktop
-    initMouseGlow();
+  // Only init mouse glow after DOM is ready and on desktop
+  if (window.innerWidth > 768 && !('ontouchstart' in window)) {
+    setTimeout(initMouseGlow, 100); // Defer to avoid blocking
   }
 });
 
@@ -387,22 +387,33 @@ function initMouseGlow() {
   let glowX = 0;
   let glowY = 0;
   
-  // Smooth animation with easing
+  // Show the glow after initialization
+  mouseGlow.style.opacity = '1';
+  
+  // Smooth animation with easing - optimized for performance
   function updateGlow() {
     const ease = 0.1;
     glowX += (mouseX - glowX) * ease;
     glowY += (mouseY - glowY) * ease;
     
-    mouseGlow.style.left = glowX + 'px';
-    mouseGlow.style.top = glowY + 'px';
+    // Use transform instead of left/top for better performance
+    mouseGlow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
     
     requestAnimationFrame(updateGlow);
   }
 
-  // Track mouse movement
+  // Track mouse movement - throttled for performance
+  let ticking = false;
   document.addEventListener('mousemove', function(e) {
     mouseX = e.clientX;
     mouseY = e.clientY;
+    
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        ticking = false;
+      });
+      ticking = true;
+    }
   });
 
   // Hide glow when mouse leaves window

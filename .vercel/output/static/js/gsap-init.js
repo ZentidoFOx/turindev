@@ -1,11 +1,35 @@
-// GSAP Initialization and Animation System
-console.log('🎬 Loading GSAP Animation System...');
+// GSAP Initialization and Animation System - Deferred Loading
+console.log('🎬 Loading GSAP Animation System (deferred)...');
 
 // Global animation systems registry (will be populated by pages)
 window.animationSystems = window.animationSystems || {};
 
-// GSAP functionality
-document.addEventListener('gsapReady', async function() {
+// Load GSAP with CDN fallback and defer animations
+function loadGSAPAndInit() {
+  // Check if GSAP is already loaded
+  if (typeof gsap !== 'undefined') {
+    initAnimations();
+    return;
+  }
+
+  // Load GSAP from CDN with performance optimization
+  const gsapScript = document.createElement('script');
+  gsapScript.src = 'https://unpkg.com/gsap@3.12.2/dist/gsap.min.js';
+  gsapScript.onload = function() {
+    // Load ScrollTrigger
+    const scrollScript = document.createElement('script');
+    scrollScript.src = 'https://unpkg.com/gsap@3.12.2/dist/ScrollTrigger.min.js';
+    scrollScript.onload = function() {
+      gsap.registerPlugin(ScrollTrigger);
+      initAnimations();
+    };
+    document.head.appendChild(scrollScript);
+  };
+  document.head.appendChild(gsapScript);
+}
+
+// Initialize animations when everything is ready
+async function initAnimations() {
   console.log('GSAP is ready!');
   
   try {
@@ -38,7 +62,18 @@ document.addEventListener('gsapReady', async function() {
     // Fallback to basic animations
     initBasicGSAPAnimations();
   }
-});
+}
+
+// Start loading GSAP after critical content is loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Defer GSAP loading to improve FCP
+    setTimeout(loadGSAPAndInit, 100);
+  });
+} else {
+  // DOM already loaded
+  setTimeout(loadGSAPAndInit, 100);
+}
 
 
 // Fallback GSAP animations if modules fail

@@ -15,8 +15,15 @@ import Icons from "../components/Icons.astro";
     <link rel="preload" href="/fonts/inter-400.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="/fonts/inter-600.ttf" as="font" type="font/ttf" crossorigin>
     
-    <!-- Critical CSS - Inline for faster FCP -->
+    <!-- Critical CSS - All fonts inline, no external requests -->
     <style>
+      /* Inter font family - all weights inline */
+      @font-face {
+        font-family: 'Inter';
+        font-weight: 300;
+        font-display: swap;
+        src: url('/fonts/inter-300.ttf') format('truetype');
+      }
       @font-face {
         font-family: 'Inter';
         font-weight: 400;
@@ -25,24 +32,39 @@ import Icons from "../components/Icons.astro";
       }
       @font-face {
         font-family: 'Inter';
+        font-weight: 500;
+        font-display: swap;
+        src: url('/fonts/inter-500.ttf') format('truetype');
+      }
+      @font-face {
+        font-family: 'Inter';
         font-weight: 600;
         font-display: swap;
         src: url('/fonts/inter-600.ttf') format('truetype');
       }
+      @font-face {
+        font-family: 'Inter';
+        font-weight: 700;
+        font-display: swap;
+        src: url('/fonts/inter-700.ttf') format('truetype');
+      }
       
       /* Critical above-the-fold styles */
       body {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         background-color: #020617;
         color: #fff;
         margin: 0;
         overflow-x: hidden;
+        line-height: 1.6;
       }
       
       .hero-section {
         min-height: 100vh;
         position: relative;
         padding-top: 3rem;
+        display: flex;
+        align-items: center;
       }
       
       .hero-title {
@@ -50,11 +72,24 @@ import Icons from "../components/Icons.astro";
         font-weight: 700;
         line-height: 1.1;
         margin: 0;
+        letter-spacing: -0.02em;
+      }
+      
+      /* Mouse glow - only show after load to avoid layout shift */
+      .mouse-glow {
+        position: fixed;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
       }
     </style>
     
-    <!-- Non-critical CSS - Load async -->
-    <link rel="stylesheet" href="/fonts/inter-local.css" media="print" onload="this.media='all'">
+    <!-- Fonts loaded inline - no external CSS blocking -->
     
     <!-- Defer non-critical image loading -->
     <link rel="prefetch" href="/images/bg.avif" as="image" type="image/avif">
