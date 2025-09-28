@@ -798,6 +798,8 @@ function createAnimation(selector, preset, options = {}) {
 
 // Hero Timeline - Coordinated sequence without reverse
 let heroTimelineCreated = false;
+// Make it globally accessible for debugging
+window.heroTimelineCreated = heroTimelineCreated;
 
 function createHeroTimeline() {
   // Prevent multiple executions of hero timeline
@@ -865,11 +867,15 @@ function createHeroTimeline() {
 
   // Mark as created to prevent duplicate executions
   heroTimelineCreated = true;
+  window.heroTimelineCreated = true; // Update global reference
+  console.log('✅ Hero timeline created successfully');
   return tl;
 }
 
 // Background animations - separate timeline
 let backgroundAnimationsCreated = false;
+// Make it globally accessible for debugging
+window.backgroundAnimationsCreated = backgroundAnimationsCreated;
 
 function createBackgroundAnimations() {
   // Prevent multiple executions of background animations
@@ -925,6 +931,8 @@ function createBackgroundAnimations() {
 
   // Mark as created to prevent duplicate executions
   backgroundAnimationsCreated = true;
+  window.backgroundAnimationsCreated = true; // Update global reference
+  console.log('✅ Background animations created successfully');
   return tl;
 }
 
@@ -1176,38 +1184,43 @@ let gsapInitialized = false;
 function initGSAPAnimations() {
   // Prevent multiple initializations
   if (gsapInitialized) {
-    console.log('GSAP already initialized, skipping...');
+    console.log('🔄 GSAP already initialized, skipping...');
     return;
   }
   
-  console.log('Checking GSAP availability...', {
+  console.log('🔍 Checking GSAP availability...', {
     gsap: typeof gsap !== 'undefined',
     ScrollTrigger: typeof ScrollTrigger !== 'undefined',
-    Draggable: typeof Draggable !== 'undefined'
+    Draggable: typeof Draggable !== 'undefined',
+    heroTimelineCreated: window.heroTimelineCreated || false,
+    backgroundAnimationsCreated: window.backgroundAnimationsCreated || false
   });
   
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof Draggable !== 'undefined') {
     try {
+      // Mark as initialized FIRST to prevent any race conditions
+      gsapInitialized = true;
+      
       // Initialize all GSAP components in the correct order
-      console.log('Initializing all GSAP animations...');
+      console.log('🚀 Initializing all GSAP animations...');
       
       // 1. Initialize main Hero and background animations
-      console.log('Step 1: Initializing Hero and background animations');
+      console.log('📝 Step 1: Initializing Hero and background animations');
       initializeGSAPAnimations();
       
       // 2. Initialize Portfolio functionality
-      console.log('Step 2: Initializing Portfolio functionality');
+      console.log('📝 Step 2: Initializing Portfolio functionality');
       initGSAPPortfolio();
       
       // 3. Initialize Testimonials slider
-      console.log('Step 3: Initializing Testimonials slider');
+      console.log('📝 Step 3: Initializing Testimonials slider');
       initGSAPTestimonials();
       
-      // Mark as initialized to prevent duplicate runs
-      gsapInitialized = true;
-      console.log('✅ All GSAP animations initialized successfully from node_modules');
+      console.log('✅ All GSAP animations initialized successfully!');
     } catch (error) {
       console.error('❌ Error initializing GSAP animations:', error);
+      // Reset flag if initialization failed
+      gsapInitialized = false;
       // Fallback: try to initialize draggable only if Draggable is available
       if (typeof Draggable !== 'undefined') {
         setTimeout(() => {
@@ -1221,23 +1234,32 @@ function initGSAPAnimations() {
 }
 
 // Listen for GSAP ready event with additional safety checks
-document.addEventListener('gsapReady', function() {
-  console.log('GSAP ready event received');
+document.addEventListener('gsapReady', function(event) {
+  console.log('🎬 GSAP ready event received from:', event.detail?.source || 'unknown');
+  
+  // Prevent multiple event handlers from firing
+  if (window.gsapEventHandled) {
+    console.log('GSAP event already handled, skipping...');
+    return;
+  }
+  window.gsapEventHandled = true;
+  
   // Use requestAnimationFrame to ensure proper timing
   requestAnimationFrame(() => {
     setTimeout(() => {
       initGSAPAnimations();
-    }, 100);
+    }, 50); // Reduced delay for better UX
   });
 });
 
 // Fallback: Initialize GSAP after a timeout if event doesn't fire
 setTimeout(() => {
-  if (!gsapInitialized && typeof gsap !== 'undefined') {
-    console.log('GSAP fallback initialization triggered');
+  if (!gsapInitialized && !window.gsapEventHandled && typeof gsap !== 'undefined') {
+    console.log('🔄 GSAP fallback initialization triggered');
+    window.gsapEventHandled = true; // Prevent future duplicates
     initGSAPAnimations();
   }
-}, 2000);
+}, 3000); // Increased timeout to give more time for proper loading
 
 // ==========================================
 // INITIALIZATION

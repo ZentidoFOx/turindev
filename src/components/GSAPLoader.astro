@@ -3,48 +3,69 @@
 ---
 
 <script>
-  // Defer GSAP loading until page is loaded for better performance
-  function loadGSAP() {
-    // Import GSAP from node_modules
-    import('gsap').then(({ gsap }) => {
-      return Promise.all([
-        import('gsap/ScrollTrigger'),
-        import('gsap/Draggable')
-      ]).then(([{ ScrollTrigger }, { Draggable }]) => {
-        // Prevent multiple initializations
-        if (!(window as any).gsapLoaded) {
-          // Register plugins
-          gsap.registerPlugin(ScrollTrigger, Draggable);
+  // Global flag to prevent any double initialization
+  if (!(window as any).gsapInitializationStarted) {
+    (window as any).gsapInitializationStarted = true;
+    
+    // Defer GSAP loading until page is loaded for better performance
+    function loadGSAP() {
+      // Double check to prevent race conditions
+      if ((window as any).gsapLoaded) {
+        console.log('GSAP already loaded, skipping...');
+        return;
+      }
+      
+      console.log('Starting GSAP initialization...');
+      
+      // Import GSAP from node_modules
+      import('gsap').then(({ gsap }) => {
+        return Promise.all([
+          import('gsap/ScrollTrigger'),
+          import('gsap/Draggable')
+        ]).then(([{ ScrollTrigger }, { Draggable }]) => {
+          // Final check before initialization
+          if (!(window as any).gsapLoaded) {
+            // Register plugins
+            gsap.registerPlugin(ScrollTrigger, Draggable);
 
-          // Make GSAP available globally for main.js
-          (window as any).gsap = gsap;
-          (window as any).ScrollTrigger = ScrollTrigger;
-          (window as any).Draggable = Draggable;
-          
-          // Mark as loaded to prevent duplicate loading
-          (window as any).gsapLoaded = true;
+            // Make GSAP available globally for main.js
+            (window as any).gsap = gsap;
+            (window as any).ScrollTrigger = ScrollTrigger;
+            (window as any).Draggable = Draggable;
+            
+            // Mark as loaded to prevent duplicate loading
+            (window as any).gsapLoaded = true;
 
-          console.log('GSAP loaded from node_modules successfully');
-          
-          // Trigger custom event to notify main.js that GSAP is ready
-          const gsapReadyEvent = new CustomEvent('gsapReady');
-          document.dispatchEvent(gsapReadyEvent);
-        }
+            console.log('✅ GSAP loaded from node_modules successfully');
+            
+            // Trigger custom event to notify main.js that GSAP is ready
+            const gsapReadyEvent = new CustomEvent('gsapReady', { 
+              detail: { source: 'GSAPLoader' }
+            });
+            document.dispatchEvent(gsapReadyEvent);
+          } else {
+            console.log('GSAP was loaded by another process, skipping event dispatch');
+          }
+        });
+      }).catch(error => {
+        console.error('❌ Failed to load GSAP:', error);
+        // Reset flag so fallback can try
+        (window as any).gsapInitializationStarted = false;
       });
-    }).catch(error => {
-      console.error('Failed to load GSAP:', error);
-    });
-  }
-
-  // Load GSAP after page content is loaded
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadGSAP);
-  } else {
-    // Use requestIdleCallback for better performance if available
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(loadGSAP);
-    } else {
-      setTimeout(loadGSAP, 100);
     }
+
+    // Load GSAP after page content is loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadGSAP);
+    } else {
+      // Use requestIdleCallback for better performance if available
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadGSAP, { timeout: 1000 });
+      } else {
+        setTimeout(loadGSAP, 100);
+      }
+    }
+  } else {
+    console.log('GSAP initialization already started by another instance');
   }
 </script>
