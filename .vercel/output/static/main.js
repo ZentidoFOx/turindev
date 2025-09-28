@@ -1,13 +1,7 @@
-// Main JavaScript - Critical functionality only
-// Initialize immediately for better FCP
-initHeader();
-
-// Defer non-critical features
+// Main JavaScript - Header, Mouse Glow and Animation Utilities
 document.addEventListener('DOMContentLoaded', function() {
-  // Only init mouse glow after DOM is ready and on desktop
-  if (window.innerWidth > 768 && !('ontouchstart' in window)) {
-    setTimeout(initMouseGlow, 100); // Defer to avoid blocking
-  }
+  initHeader();
+  initMouseGlow();
 });
 
 // ========================================
@@ -296,30 +290,13 @@ function initHeader() {
     return;
   }
 
-  // Header scroll effect - optimized to prevent forced reflow
-  let ticking = false;
-  let lastScrollY = 0;
-  
+  // Header scroll effect
   function handleScroll() {
-    lastScrollY = window.scrollY;
-    
-    if (!ticking) {
-      requestAnimationFrame(updateHeader);
-      ticking = true;
-    }
-  }
-  
-  function updateHeader() {
-    if (lastScrollY > 50) {
-      if (!header.classList.contains('scrolled')) {
-        header.classList.add('scrolled');
-      }
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
     } else {
-      if (header.classList.contains('scrolled')) {
-        header.classList.remove('scrolled');
-      }
+      header.classList.remove('scrolled');
     }
-    ticking = false;
   }
 
   // Mobile menu toggle
@@ -404,33 +381,22 @@ function initMouseGlow() {
   let glowX = 0;
   let glowY = 0;
   
-  // Show the glow after initialization
-  mouseGlow.style.opacity = '1';
-  
-  // Smooth animation with easing - optimized for performance
+  // Smooth animation with easing
   function updateGlow() {
     const ease = 0.1;
     glowX += (mouseX - glowX) * ease;
     glowY += (mouseY - glowY) * ease;
     
-    // Use transform instead of left/top for better performance
-    mouseGlow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
+    mouseGlow.style.left = glowX + 'px';
+    mouseGlow.style.top = glowY + 'px';
     
     requestAnimationFrame(updateGlow);
   }
 
-  // Track mouse movement - throttled for performance
-  let ticking = false;
+  // Track mouse movement
   document.addEventListener('mousemove', function(e) {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        ticking = false;
-      });
-      ticking = true;
-    }
   });
 
   // Hide glow when mouse leaves window
