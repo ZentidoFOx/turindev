@@ -795,7 +795,14 @@ function createAnimation(selector, preset, options = {}) {
 }
 
 // Hero Timeline - Coordinated sequence without reverse
+let heroTimelineCreated = false;
+
 function createHeroTimeline() {
+  // Prevent multiple executions of hero timeline
+  if (heroTimelineCreated) {
+    console.log('Hero timeline already created, skipping...');
+    return null;
+  }
   const tl = gsap.timeline({ defaults: { ease: EASING_PRESETS.smooth } });
 
   // Set initial states to prevent FOUC and reverse animations
@@ -862,11 +869,20 @@ function createHeroTimeline() {
       delay: 0.3
     }, 2.2);
 
+  // Mark as created to prevent duplicate executions
+  heroTimelineCreated = true;
   return tl;
 }
 
 // Background animations - separate timeline
+let backgroundAnimationsCreated = false;
+
 function createBackgroundAnimations() {
+  // Prevent multiple executions of background animations
+  if (backgroundAnimationsCreated) {
+    console.log('Background animations already created, skipping...');
+    return null;
+  }
   const tl = gsap.timeline();
 
   // Set initial state
@@ -909,6 +925,8 @@ function createBackgroundAnimations() {
       }
     }, 2.5);
 
+  // Mark as created to prevent duplicate executions
+  backgroundAnimationsCreated = true;
   return tl;
 }
 
@@ -1155,12 +1173,31 @@ function initGSAPCounters() {
 // ==========================================
 // GSAP INITIALIZATION HELPER
 // ==========================================
+let gsapInitialized = false;
+
 function initGSAPAnimations() {
+  // Prevent multiple initializations
+  if (gsapInitialized) {
+    console.log('GSAP already initialized, skipping...');
+    return;
+  }
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof Draggable !== 'undefined') {
     try {
-      // GSAP is already registered in gsap-init.js
+      // Initialize all GSAP components in the correct order
+      console.log('Initializing all GSAP animations...');
+      
+      // 1. Initialize main Hero and background animations
       initializeGSAPAnimations();
-      console.log('GSAP animations initialized successfully from node_modules');
+      
+      // 2. Initialize Portfolio functionality
+      initGSAPPortfolio();
+      
+      // 3. Initialize Testimonials slider
+      initGSAPTestimonials();
+      
+      // Mark as initialized to prevent duplicate runs
+      gsapInitialized = true;
+      console.log('All GSAP animations initialized successfully from node_modules');
     } catch (error) {
       console.error('Error initializing GSAP animations:', error);
       // Fallback: try to initialize draggable only if Draggable is available
@@ -1185,15 +1222,11 @@ document.addEventListener('gsapReady', function() {
 // INITIALIZATION
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
-  // Initialize basic functionality first
+  // Initialize basic functionality first (non-GSAP)
   initCursorGlow();
   initHeader();
-  
-  // Initialize other components
-  initGSAPPortfolio();
-  initGSAPTestimonials();
   initContactForm();
   
-  // GSAP will be initialized via the 'gsapReady' event from gsap-init.js
+  // GSAP components will be initialized via the 'gsapReady' event
   console.log('DOM loaded, waiting for GSAP to be ready...');
 });
