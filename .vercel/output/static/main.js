@@ -89,6 +89,7 @@ function initHeader() {
   const toggleButton = DOM.select("#header-navbar-toggle");
   const navbar = DOM.select("#header-navbar");
   const navLinks = DOM.selectAll("#header-navbar a");
+  const overlay = DOM.select("#mobile-overlay");
   
   if (!header) return;
   
@@ -97,21 +98,39 @@ function initHeader() {
   
   // Unified menu state management
   const setMenuState = (isOpen) => {
-    DOM.toggleClass(navbar, 'show', isOpen);
-    DOM.toggleClass(toggleButton, 'active', isOpen);
+    console.log('Setting menu state to:', isOpen ? 'open' : 'closed');
+    console.log('Elements found:', {
+      header: !!header,
+      navbar: !!navbar,
+      overlay: !!overlay,
+      toggleButton: !!toggleButton
+    });
+    
+    // Toggle classes for menu state
+    DOM.toggleClass(header, 'mobile-menu-open', isOpen);
     DOM.toggleClass(document.body, 'menu-open', isOpen);
+    
+    // Toggle the mobile menu visibility
+    if (navbar) {
+      DOM.toggleClass(navbar, 'show', isOpen);
+    }
     
     // Update ARIA attributes
     if (toggleButton) {
       toggleButton.setAttribute('aria-expanded', isOpen.toString());
+      toggleButton.setAttribute('title', isOpen ? 'Cerrar Menú' : 'Mostrar Menú');
+      toggleButton.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Mostrar menú');
     }
+    
+    console.log('Menu state changed:', isOpen ? 'open' : 'closed');
+    console.log('Navbar classes:', navbar ? navbar.className : 'navbar not found');
   };
   
   // Mobile menu toggle
   if (toggleButton && navbar) {
     const toggleCleanup = DOM.on(toggleButton, 'click', (e) => {
       e.preventDefault();
-      const isCurrentlyOpen = navbar.classList.contains('show');
+      const isCurrentlyOpen = header.classList.contains('mobile-menu-open');
       setMenuState(!isCurrentlyOpen);
     });
     cleanupFunctions.push(toggleCleanup);
@@ -127,20 +146,29 @@ function initHeader() {
     cleanupFunctions.push(linkCleanup);
   });
   
-  // Close menu when clicking outside (mobile)
+  // Close menu when clicking outside (mobile) or on overlay
   const outsideClickCleanup = DOM.on(document, 'click', (e) => {
-    if (navbar && navbar.classList.contains('show')) {
-      if (!header.contains(e.target)) {
+    if (header.classList.contains('mobile-menu-open')) {
+      if (!header.contains(e.target) || e.target === overlay) {
         setMenuState(false);
       }
     }
   });
   cleanupFunctions.push(outsideClickCleanup);
   
+  // Close menu when clicking overlay
+  if (overlay) {
+    const overlayCleanup = DOM.on(overlay, 'click', () => {
+      setMenuState(false);
+    });
+    cleanupFunctions.push(overlayCleanup);
+  }
+  
   // Scroll behavior - throttled for performance
   const handleScroll = AnimUtils.throttle(() => {
     const scrolled = window.scrollY > 50;
     DOM.toggleClass(header, 'scrolled', scrolled);
+    console.log('Scroll position:', window.scrollY, 'Header scrolled:', scrolled);
   }, 16); // ~60fps
   
   const scrollCleanup = DOM.on(window, 'scroll', handleScroll);
