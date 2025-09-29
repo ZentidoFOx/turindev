@@ -1,33 +1,178 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
-import Header from "../components/Header.astro";
-import Hero from "../components/home/Hero.astro";
-import Portafolio from "../components/home/Portafolio.astro";
-import Testimonios from "../components/home/Testimonios.astro";
-import Servicios from "../components/home/Servicios.astro";
-import Footer from "../components/Footer.astro";
-import Blogs from "../components/home/Blogs.astro";
-import Contacto from "../components/home/Contacto.astro";
 ---
+
 <Layout>
-	<Header />
-	<main class="w-full overflow-x-hidden">
-		<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-			<Hero />
-			<Servicios />
-			<Portafolio />
-			<Testimonios />
-			<Blogs />
-			<Contacto />
-		</div>
-	</main>
-	<Footer />
-	
-	<!-- Register animations for this page -->
-	<script is:inline>
-	  // Register home page animations
-	  window.animationSystems = window.animationSystems || {};
-	  window.animationSystems.home = () => import('/js/animations/index.js');
-	</script>
+  <main class="min-h-screen flex items-center justify-center px-4">
+    
+    <!-- Terminal Window -->
+    <div class="w-full max-w-2xl">
+      
+      <!-- Terminal Header -->
+      <div class="bg-gray-800/90 backdrop-blur-sm rounded-t-xl border border-gray-700/50 px-4 py-3 flex items-center gap-2">
+        <div class="flex gap-2">
+          <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+          <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+          <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+        </div>
+        <div class="flex-1 text-center">
+          <span class="text-gray-400 text-sm font-mono">turin.dev</span>
+        </div>
+      </div>
+
+      <!-- Terminal Content -->
+      <div class="bg-gray-900/95 backdrop-blur-sm rounded-b-xl border-x border-b border-gray-700/50 p-4 font-mono text-sm">
+        
+        <!-- Code Block -->
+        <div class="space-y-1">
+          <div class="text-purple-400">const <span class="text-blue-400">developer</span> = &#123;</div>
+          <div class="ml-4 text-gray-300">name: <span class="text-green-400">&#39;Turin Dev&#39;</span>,</div>
+          <div class="ml-4 text-gray-300">email: <span class="text-green-400">&#39;info@turin.dev&#39;</span>,</div>
+          <div class="ml-4 text-gray-300">status: <span class="text-orange-400">&#39;Building something amazing&#39;</span>,</div>
+          <div class="ml-4 text-gray-300">skills: [<span class="text-green-400">&#39;React&#39;, &#39;Node.js&#39;, &#39;TypeScript&#39;, &#39;Astro&#39;</span>]</div>
+          <div class="text-purple-400">&#125;;</div>
+        </div>
+
+        <!-- Terminal Prompt -->
+        <div class="mt-4 space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="text-green-400">➜</span>
+            <span class="text-blue-400">~</span>
+            <span class="text-gray-300">echo &#34;Coming Soon...&#34;</span>
+          </div>
+          <div class="text-green-400 typing-animation">Coming Soon...</div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mt-4 space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="text-green-400">➜</span>
+            <span class="text-blue-400">~</span>
+            <span class="text-gray-300">npm run build</span>
+          </div>
+          <div class="flex items-center gap-2 mt-1">
+            <div class="flex-1 bg-gray-700 rounded-full h-2 overflow-hidden">
+              <div class="bg-gradient-to-r from-green-400 to-emerald-500 h-2 rounded-full progress-bar shadow-sm shadow-green-400/50"></div>
+            </div>
+            <span class="text-green-400 text-xs font-mono">75%</span>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="mt-4 pt-3 border-t border-gray-700/50">
+          <!-- Email destacado -->
+          <div class="bg-gray-800/50 border border-gray-600/30 rounded-lg p-3 mb-3">
+            <div class="text-gray-400 text-xs mb-1">📧 Contact:</div>
+            <a href="mailto:info@turin.dev" 
+               class="text-green-400 hover:text-green-300 transition-all duration-300 text-sm font-semibold 
+                      hover:bg-green-400/10 px-1 py-0.5 rounded -ml-1 inline-block">
+              info@turin.dev
+            </a>
+          </div>
+          
+          <!-- Social Links & Navigation -->
+          <div class="flex items-center justify-between text-xs">
+            <div class="flex gap-4">
+              <a href="https://github.com/" 
+                 class="text-gray-400 hover:text-white transition-colors hover:scale-110 transform duration-200"
+                 target="_blank" rel="noopener noreferrer">
+                GitHub
+              </a>
+              <a href="https://linkedin.com/in/" 
+                 class="text-gray-400 hover:text-white transition-colors hover:scale-110 transform duration-200"
+                 target="_blank" rel="noopener noreferrer">
+                LinkedIn
+              </a>
+              <a href="https://x.com/" 
+                 class="text-gray-400 hover:text-white transition-colors hover:scale-110 transform duration-200"
+                 target="_blank" rel="noopener noreferrer">
+                Twitter
+              </a>
+            </div>
+            <a href="/" class="text-gray-400 hover:text-green-400 transition-colors flex items-center gap-1">
+              <span class="text-green-400">➜</span> home
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
 </Layout>
+
+<style>
+  /* Terminal typing animation */
+  @keyframes typing {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  .typing-animation {
+    animation: typing 2s ease-in-out infinite;
+  }
+  
+  /* Progress bar animation */
+  @keyframes progress {
+    0% { 
+      width: 0%; 
+      box-shadow: 0 0 0 rgba(34, 197, 94, 0);
+    }
+    50% { 
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+    }
+    100% { 
+      width: 75%; 
+      box-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+    }
+  }
+  
+  .progress-bar {
+    animation: progress 4s ease-out infinite;
+  }
+  
+  /* Terminal window glow */
+  .bg-gray-900\/95 {
+    box-shadow: 
+      0 0 50px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+  
+  /* Email highlight effect */
+  a[href^="mailto:"]:hover {
+    text-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+    transform: translateY(-1px);
+  }
+  
+  /* Social links hover effect */
+  a[target="_blank"]:hover {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Terminal prompt glow */
+  .text-green-400 {
+    text-shadow: 0 0 3px rgba(34, 197, 94, 0.4);
+  }
+  
+  .text-blue-400 {
+    text-shadow: 0 0 3px rgba(59, 130, 246, 0.4);
+  }
+  
+  /* Responsive font sizing */
+  @media (max-width: 640px) {
+    .font-mono {
+      font-size: 0.75rem;
+    }
+    
+    .text-base {
+      font-size: 0.875rem;
+    }
+  }
+  
+  /* Smooth transitions */
+  * {
+    transition: all 0.2s ease;
+  }
+</style>
